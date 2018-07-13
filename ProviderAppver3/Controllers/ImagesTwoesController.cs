@@ -49,10 +49,12 @@ namespace ProviderAppver3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ImageID,ImageBin,ImageIMG,CustomerID,ProviderID")] ImagesTwo imagesTwo)
+        public ActionResult Create([Bind(Include = "ImageID,ImageBin,ImageIMG,CustomerID,ProviderID")] ImagesTwo imagesTwo, HttpPostedFileBase image1)
         {
             if (ModelState.IsValid)
             {
+                imagesTwo.ImageBin = new byte[image1.ContentLength];
+                image1.InputStream.Read(imagesTwo.ImageBin, 0, image1.ContentLength);
                 db.ImagesTwoes.Add(imagesTwo);
                 db.SaveChanges();
                 return RedirectToAction("Index");
