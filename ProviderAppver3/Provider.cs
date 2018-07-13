@@ -18,7 +18,7 @@ namespace ProviderAppver3
         public Provider()
         {
             this.Addresses = new HashSet<Address>();
-            this.Images = new HashSet<Image>();
+            this.ImagesTwoes = new HashSet<ImagesTwo>();
         }
     
         public int ProviderID { get; set; }
@@ -31,6 +31,6 @@ namespace ProviderAppver3
         public virtual ICollection<Address> Addresses { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<ImagesTwo> ImagesTwoes { get; set; }
     }
 }

@@ -32,7 +32,8 @@ namespace ProviderAppver3
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Provider> Providers { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
+        public virtual DbSet<ImagesTwo> ImagesTwoes { get; set; }
     }
 }

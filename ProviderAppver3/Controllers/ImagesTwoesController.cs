@@ -10,33 +10,33 @@ using ProviderAppver3;
 
 namespace ProviderAppver3.Controllers
 {
-    public class ImagesController : Controller
+    public class ImagesTwoesController : Controller
     {
         private ProviderDBV2Entities db = new ProviderDBV2Entities();
 
-        // GET: Images
+        // GET: ImagesTwoes
         public ActionResult Index()
         {
-            var images = db.Images.Include(i => i.Customer).Include(i => i.Provider);
-            return View(images.ToList());
+            var imagesTwoes = db.ImagesTwoes.Include(i => i.Customer).Include(i => i.Provider);
+            return View(imagesTwoes.ToList());
         }
 
-        // GET: Images/Details/5
+        // GET: ImagesTwoes/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Image image = db.Images.Find(id);
-            if (image == null)
+            ImagesTwo imagesTwo = db.ImagesTwoes.Find(id);
+            if (imagesTwo == null)
             {
                 return HttpNotFound();
             }
-            return View(image);
+            return View(imagesTwo);
         }
 
-        // GET: Images/Create
+        // GET: ImagesTwoes/Create
         public ActionResult Create()
         {
             ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName");
@@ -44,82 +44,82 @@ namespace ProviderAppver3.Controllers
             return View();
         }
 
-        // POST: Images/Create
+        // POST: ImagesTwoes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ImageID,ImageBin,ImagIMG,CustomerID,ProviderID")] Image image)
+        public ActionResult Create([Bind(Include = "ImageID,ImageBin,ImageIMG,CustomerID,ProviderID")] ImagesTwo imagesTwo)
         {
             if (ModelState.IsValid)
             {
-                db.Images.Add(image);
+                db.ImagesTwoes.Add(imagesTwo);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName", image.CustomerID);
-            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName", image.ProviderID);
-            return View(image);
+            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName", imagesTwo.CustomerID);
+            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName", imagesTwo.ProviderID);
+            return View(imagesTwo);
         }
 
-        // GET: Images/Edit/5
+        // GET: ImagesTwoes/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Image image = db.Images.Find(id);
-            if (image == null)
+            ImagesTwo imagesTwo = db.ImagesTwoes.Find(id);
+            if (imagesTwo == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName", image.CustomerID);
-            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName", image.ProviderID);
-            return View(image);
+            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName", imagesTwo.CustomerID);
+            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName", imagesTwo.ProviderID);
+            return View(imagesTwo);
         }
 
-        // POST: Images/Edit/5
+        // POST: ImagesTwoes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ImageID,ImageBin,ImagIMG,CustomerID,ProviderID")] Image image)
+        public ActionResult Edit([Bind(Include = "ImageID,ImageBin,ImageIMG,CustomerID,ProviderID")] ImagesTwo imagesTwo)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(image).State = EntityState.Modified;
+                db.Entry(imagesTwo).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName", image.CustomerID);
-            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName", image.ProviderID);
-            return View(image);
+            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName", imagesTwo.CustomerID);
+            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName", imagesTwo.ProviderID);
+            return View(imagesTwo);
         }
 
-        // GET: Images/Delete/5
+        // GET: ImagesTwoes/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Image image = db.Images.Find(id);
-            if (image == null)
+            ImagesTwo imagesTwo = db.ImagesTwoes.Find(id);
+            if (imagesTwo == null)
             {
                 return HttpNotFound();
             }
-            return View(image);
+            return View(imagesTwo);
         }
 
-        // POST: Images/Delete/5
+        // POST: ImagesTwoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Image image = db.Images.Find(id);
-            db.Images.Remove(image);
+            ImagesTwo imagesTwo = db.ImagesTwoes.Find(id);
+            db.ImagesTwoes.Remove(imagesTwo);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -12,12 +12,15 @@ namespace ProviderAppver3
     using System;
     using System.Collections.Generic;
     
-    public partial class Image
+    public partial class ImagesTwo
     {
         public int ImageID { get; set; }
         public byte[] ImageBin { get; set; }
-        public byte[] ImagIMG { get; set; }
+        public byte[] ImageIMG { get; set; }
         public Nullable<int> CustomerID { get; set; }
         public Nullable<int> ProviderID { get; set; }
+    
+        public virtual Customer Customer { get; set; }
+        public virtual Provider Provider { get; set; }
     }
 }
