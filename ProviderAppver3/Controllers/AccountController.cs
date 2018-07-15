@@ -164,11 +164,11 @@ namespace ProviderAppver3.Controllers
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                     if (model.IsProvider.Equals(true))
                     {
-                        return RedirectToAction("Index", "Providers");
+                        return RedirectToAction("Create", "Providers");
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Customers");
+                        return RedirectToAction("Create", "Customers");
                     }
 
                 }

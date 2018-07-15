@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using ProviderAppver3;
 
 namespace ProviderAppver3.Controllers
@@ -42,7 +43,7 @@ namespace ProviderAppver3.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            ViewBag.UserName = new SelectList(db.AspNetUsers, "Id", "Email");
+            ViewBag.ProviderEmail = new SelectList(db.AspNetUsers, "Id", "Email");
             return View();
         }
 
@@ -56,6 +57,7 @@ namespace ProviderAppver3.Controllers
         {
             if (ModelState.IsValid)
             {
+                provider.UserName = User.Identity.GetUserId(); // makes provider email equal to asp.net user email
                 db.Providers.Add(provider);
                 db.SaveChanges();
                 return RedirectToAction("Index");

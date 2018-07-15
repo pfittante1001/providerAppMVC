@@ -40,10 +40,10 @@ namespace ProviderAppver3.Controllers
 
         // GET: Addresses/Create
         [Authorize]
-        public ActionResult Create()
+        public ActionResult Create(int? customerID = null, int? providerID = null)
         {
-            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName");
-            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName");
+            ViewBag.customerID = customerID;
+            ViewBag.providerID = providerID;
             return View();
         }
 
@@ -56,7 +56,7 @@ namespace ProviderAppver3.Controllers
         public ActionResult Create([Bind(Include = "AddressID,StreetNumber,StreetName,City,State,PostalCode,CustomerID,ProviderID")] Address address)
         {
             if (ModelState.IsValid)
-            {
+            { 
                 db.Addresses.Add(address);
                 db.SaveChanges();
                 return RedirectToAction("Index");
