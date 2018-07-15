@@ -16,8 +16,16 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ImageBin)
-        </dd>
+                @{
+        if (Model.ImageBin != null)
+        {
+            string imageBase64 = Convert.ToBase64String(Model.ImageBin);
+            string imageSrc = string.Format("data:image/gif;base64,{0}", imageBase64);
+            <img src="@imageSrc" width="100" height="100" />
+        }
+                }
+
+</dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.ImageIMG)
