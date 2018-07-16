@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using ProviderAppver3;
 
 namespace ProviderAppver3.Controllers
@@ -40,10 +41,8 @@ namespace ProviderAppver3.Controllers
 
         // GET: Addresses/Create
         [Authorize]
-        public ActionResult Create(int? customerID = null, int? providerID = null)
+        public ActionResult Create()
         {
-            ViewBag.customerID = customerID;
-            ViewBag.providerID = providerID;
             return View();
         }
 
@@ -56,14 +55,22 @@ namespace ProviderAppver3.Controllers
         public ActionResult Create([Bind(Include = "AddressID,StreetNumber,StreetName,City,State,PostalCode,CustomerID,ProviderID")] Address address)
         {
             if (ModelState.IsValid)
-            { 
+            {
+                string id = User.Identity.GetUserId();
+                bool? provider = (from pr in db.AspNetUsers where pr.Id == id select pr.IsProvider).Single();
+                if ((bool) provider)
+                {
+                    address.ProviderID = (from p in db.Providers where p.UserName == id select p.ProviderID).Single();
+                }
+                else
+                {
+                    address.CustomerID = (from c in db.Customers where c.UserName == id select c.CustomerID).Single();
+                }
                 db.Addresses.Add(address);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName", address.CustomerID);
-            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName", address.ProviderID);
             return View(address);
         }
 

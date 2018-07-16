@@ -55,7 +55,7 @@
     </div>
 }
 
-<div id="idholder" style="display:none">@Html.DisplayFor(model => model.CustomerID)</div>
+//<div id="idholder" style="display:none">@Html.DisplayFor(model => model.CustomerID)</div>
 
 <div>
     @Html.ActionLink("Back to List", "Index")
@@ -63,7 +63,7 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
-    <script>
+    @*<script>
         var CustID = document.getElementById("idholder").innerText.toString();
         var thisID = parseInt(CustID);
         console.log(thisID);
@@ -76,5 +76,5 @@
             })
 
         })
-    </script>
+    </script>*@
 }
