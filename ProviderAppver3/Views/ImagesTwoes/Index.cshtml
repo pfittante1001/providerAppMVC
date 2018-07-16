@@ -29,10 +29,14 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.ImageBin)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ImageIMG)
+            @if (item.ImageBin != null) { 
+               
+                var base64 = Convert.ToBase64String(item.ImageBin);
+                var imgsrc = string.Format("data:image/jpeg; base64,{0}", base64);
+               
+                <img src="@imgsrc" style="max-width:100px;max-height:100px;" />
+               }
+            
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Customer.CustomerName)

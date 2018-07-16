@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using ProviderAppver3;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace ProviderAppver3.Controllers
 {
@@ -145,5 +147,56 @@ namespace ProviderAppver3.Controllers
             }
             base.Dispose(disposing);
         }
+
+        //public ActionResult Index()
+        //{
+        //    List<ImagesTwo> images = GetImages();
+        //    return View(images);
+        //}
+
+        //[HttpPost]
+        //public ActionResult Index(int imageId)
+        //{
+        //    List<ImagesTwo> images = GetImages();
+        //    ImagesTwo image = images.Find(p => p.ImageID == imageId);
+        //    if (image != null)
+        //    {
+        //        ViewBag.Base64String = "data:image/png;base64," + Convert.ToBase64String(image.ImageBin, 0, image.ImageBin.Length);
+        //    }
+        //    return View(images);
+        //}
+
+        //private List<ImagesTwo> GetImages()
+        //{
+        //    string query = "SELECT * FROM ImagesTwo";
+        //    List<ImagesTwo> images = new List<ImagesTwo>();
+        //    string constr = ConfigurationManager.ConnectionStrings["ProviderDBV2Entities"].ConnectionString;
+        //    using (SqlConnection con = new SqlConnection(constr))
+        //    {
+        //        using (SqlCommand cmd = new SqlCommand(query))
+        //        {
+        //            cmd.CommandType = CommandType.Text;
+        //            cmd.Connection = con;
+        //            con.Open();
+        //            using (SqlDataReader sdr = cmd.ExecuteReader())
+        //            {
+        //                while (sdr.Read())
+        //                {
+        //                    images.Add(new ImagesTwo
+        //                    {
+        //                        ImageID = Convert.ToInt32(sdr["ImageID"]),
+        //                        //Name = sdr["Name"].ToString(),
+        //                        //ContentType = sdr["ContentType"].ToString(),
+        //                        ImageBin = (byte[])sdr["ImageBin"]
+        //                    });
+        //                }
+        //            }
+        //            con.Close();
+        //        }
+
+        //        return images;
+        //    }
+        //}
     }
 }
+
