@@ -60,7 +60,7 @@ namespace ProviderAppver3.Controllers
                 provider.UserName = User.Identity.GetUserId(); // makes provider email equal to asp.net user email
                 db.Providers.Add(provider);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Create", "Addresses");
             }
 
             ViewBag.UserName = new SelectList(db.AspNetUsers, "Id", "Email", provider.UserName);
