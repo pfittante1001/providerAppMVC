@@ -26,5 +26,10 @@ namespace ProviderAppver3.Controllers
 
             return View();
         }
+
+        public ActionResult Maps()
+        {
+            return View();
+        }
     }
 }
