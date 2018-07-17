@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GoogleMaps.LocationServices;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -29,7 +30,16 @@ namespace ProviderAppver3.Controllers
 
         public ActionResult Maps()
         {
+            var address = "1234 Bryce Ave, Aurora, Ohio";
+            var locationService = new GoogleLocationService();
+            var point = locationService.GetLatLongFromAddress(address);
+
+            var latitude = point.Latitude;
+            var longitude = point.Longitude;
+            ViewBag.Latitude = latitude;
+            ViewBag.Longitude = longitude;
             return View();
+
         }
     }
 }
