@@ -1,0 +1,51 @@
+﻿@model IEnumerable<ProviderAppver3.Image>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageBin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImagIMG)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Customer.CustomerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Provider.ProviderName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ImageBin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ImagIMG)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Customer.CustomerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Provider.ProviderName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ImageID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ImageID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ImageID })
+        </td>
+    </tr>
+}
+
+</table>

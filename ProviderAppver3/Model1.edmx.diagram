@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2695801960d4428387aafbf14237daab" Name="Diagram1">
+        <EntityTypeShape EntityType="ProviderDBV2Model.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.Address" Width="1.5" PointX="7.5" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.AspNetRole" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.AspNetUser" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.Customer" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.Image" Width="1.5" PointX="10.5" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.Provider" Width="1.5" PointX="5.25" PointY="11.875" IsExpanded="true" />
+        <AssociationConnector Association="ProviderDBV2Model.FK_Addresses_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="ProviderDBV2Model.FK_Addresses_Providers" ManuallyRouted="false" />
+        <AssociationConnector Association="ProviderDBV2Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="ProviderDBV2Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="ProviderDBV2Model.FK_Customers_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="ProviderDBV2Model.FK_Providers_AspNetUsers" ManuallyRouted="false" />
+        <AssociationConnector Association="ProviderDBV2Model.FK_Images_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="ProviderDBV2Model.FK_Images_Providers" ManuallyRouted="false" />
+        <AssociationConnector Association="ProviderDBV2Model.AspNetUserRoles" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
