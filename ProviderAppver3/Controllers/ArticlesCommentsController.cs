@@ -43,6 +43,28 @@ namespace ProviderAppver3.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Add(FormCollection form)
+        {
+            var comment = form["Comment"].ToString();
+            var articleId = int.Parse(form["ArticleId"]);
+            var rating = int.Parse(form["Rating"]);
+
+            ArticlesComment artComment = new ArticlesComment()
+            {
+                ProviderID = articleId,
+                Comments = comment,
+                Rating = rating,
+                ThisDateTime = DateTime.Now
+            };
+
+            db.ArticlesComments.Add(artComment);
+            db.SaveChanges();
+
+            return RedirectToAction("Details", "Providers", new { id = articleId });
+        }
+
         // POST: ArticlesComments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
 using ProviderAppver3;
 
 namespace ProviderAppver3.Controllers
@@ -16,7 +15,6 @@ namespace ProviderAppver3.Controllers
         private ProviderDBV2Entities db = new ProviderDBV2Entities();
 
         // GET: Providers
-        [Authorize]
         public ActionResult Index()
         {
             var providers = db.Providers.Include(p => p.AspNetUser);
@@ -24,7 +22,6 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Providers/Details/5
-        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -36,14 +33,32 @@ namespace ProviderAppver3.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.ArticleId = id.Value;
+
+            var comments = db.ArticlesComments.Where(d => d.ProviderID == id.Value).ToList();
+            ViewBag.Comments = comments;
+
+            var ratings = db.ArticlesComments.Where(d => d.ProviderID == id.Value).ToList();
+            if (ratings.Count() > 0)
+            {
+                var ratingSum = ratings.Sum(d => d.Rating.Value);
+                ViewBag.RatingSum = ratingSum;
+                var ratingCount = ratings.Count();
+                ViewBag.RatingCount = ratingCount;
+            }
+            else
+            {
+                ViewBag.RatingSum = 0;
+                ViewBag.RatingCount = 0;
+            }
+
             return View(provider);
         }
 
         // GET: Providers/Create
-        [Authorize]
         public ActionResult Create()
         {
-            ViewBag.ProviderEmail = new SelectList(db.AspNetUsers, "Id", "Email");
+            ViewBag.UserName = new SelectList(db.AspNetUsers, "Id", "Email");
             return View();
         }
 
@@ -52,15 +67,13 @@ namespace ProviderAppver3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        public ActionResult Create([Bind(Include = "ProviderID,ProviderName,ProviderPhone,ProviderEmail,UserName")] Provider provider)
+        public ActionResult Create([Bind(Include = "ProviderID,ProviderName,ProviderPhone,ProviderEmail,UserName,Title,Description,Active")] Provider provider)
         {
             if (ModelState.IsValid)
             {
-                provider.UserName = User.Identity.GetUserId(); // makes provider email equal to asp.net user email
                 db.Providers.Add(provider);
                 db.SaveChanges();
-                return RedirectToAction("Create", "Addresses");
+                return RedirectToAction("Index");
             }
 
             ViewBag.UserName = new SelectList(db.AspNetUsers, "Id", "Email", provider.UserName);
@@ -68,7 +81,6 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Providers/Edit/5
-        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -89,8 +101,7 @@ namespace ProviderAppver3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        public ActionResult Edit([Bind(Include = "ProviderID,ProviderName,ProviderPhone,ProviderEmail,UserName")] Provider provider)
+        public ActionResult Edit([Bind(Include = "ProviderID,ProviderName,ProviderPhone,ProviderEmail,UserName,Title,Description,Active")] Provider provider)
         {
             if (ModelState.IsValid)
             {
@@ -103,7 +114,6 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Providers/Delete/5
-        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
