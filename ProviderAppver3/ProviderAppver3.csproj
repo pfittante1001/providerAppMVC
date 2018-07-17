@@ -214,6 +214,7 @@
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AddressesController.cs" />
+    <Compile Include="Controllers\ArticlesCommentsController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImagesTwoesController.cs" />
@@ -1782,6 +1783,11 @@
     <Content Include="Views\ImagesTwoes\Index.cshtml" />
     <Content Include="Views\Maps.cshtml" />
     <Content Include="Views\Home\Maps.cshtml" />
+    <Content Include="Views\ArticlesComments\Create.cshtml" />
+    <Content Include="Views\ArticlesComments\Delete.cshtml" />
+    <Content Include="Views\ArticlesComments\Details.cshtml" />
+    <Content Include="Views\ArticlesComments\Edit.cshtml" />
+    <Content Include="Views\ArticlesComments\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
