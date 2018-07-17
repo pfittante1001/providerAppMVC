@@ -28,6 +28,16 @@
           <Property Name="CustomerID" Type="int" />
           <Property Name="ProviderID" Type="int" />
         </EntityType>
+        <EntityType Name="ArticlesComments">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Comments" Type="varchar(max)" />
+          <Property Name="ThisDateTime" Type="datetime" />
+          <Property Name="ProviderID" Type="int" />
+          <Property Name="Rating" Type="int" />
+        </EntityType>
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -90,16 +100,6 @@
           <Property Name="CustomerEmail" Type="nvarchar" MaxLength="50" />
           <Property Name="UserName" Type="nvarchar" MaxLength="128" />
         </EntityType>
-        <EntityType Name="Images">
-          <Key>
-            <PropertyRef Name="ImageID" />
-          </Key>
-          <Property Name="ImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ImageBin" Type="varbinary(max)" />
-          <Property Name="ImagIMG" Type="image" />
-          <Property Name="CustomerID" Type="int" />
-          <Property Name="ProviderID" Type="int" />
-        </EntityType>
         <EntityType Name="ImagesTwo">
           <Key>
             <PropertyRef Name="ImageID" />
@@ -119,6 +119,9 @@
           <Property Name="ProviderPhone" Type="nvarchar" MaxLength="50" />
           <Property Name="ProviderEmail" Type="nvarchar" MaxLength="128" />
           <Property Name="UserName" Type="nvarchar" MaxLength="128" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="Active" Type="bit" />
         </EntityType>
         <Association Name="FK_Addresses_Customers">
           <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
@@ -140,6 +143,18 @@
               <PropertyRef Name="ProviderID" />
             </Principal>
             <Dependent Role="Addresses">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ArticlesComments_Providers">
+          <End Role="Providers" Type="Self.Providers" Multiplicity="0..1" />
+          <End Role="ArticlesComments" Type="Self.ArticlesComments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Providers">
+              <PropertyRef Name="ProviderID" />
+            </Principal>
+            <Dependent Role="ArticlesComments">
               <PropertyRef Name="ProviderID" />
             </Dependent>
           </ReferentialConstraint>
@@ -251,13 +266,13 @@
         <EntityContainer Name="ProviderDBV2ModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Addresses" EntityType="Self.Addresses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ArticlesComments" EntityType="Self.ArticlesComments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Images" EntityType="Self.Images" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImagesTwo" EntityType="Self.ImagesTwo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Providers" EntityType="Self.Providers" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Addresses_Customers" Association="Self.FK_Addresses_Customers">
@@ -267,6 +282,10 @@
           <AssociationSet Name="FK_Addresses_Providers" Association="Self.FK_Addresses_Providers">
             <End Role="Providers" EntitySet="Providers" />
             <End Role="Addresses" EntitySet="Addresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArticlesComments_Providers" Association="Self.FK_ArticlesComments_Providers">
+            <End Role="Providers" EntitySet="Providers" />
+            <End Role="ArticlesComments" EntitySet="ArticlesComments" />
           </AssociationSet>
           <AssociationSet Name="FK_Customers_AspNetUsers" Association="Self.FK_Customers_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -407,6 +426,10 @@
           <NavigationProperty Name="Addresses" Relationship="Self.FK_Addresses_Providers" FromRole="Providers" ToRole="Addresses" />
           <NavigationProperty Name="AspNetUser" Relationship="Self.FK_Providers_AspNetUsers" FromRole="Providers" ToRole="AspNetUsers" />
           <NavigationProperty Name="ImagesTwoes" Relationship="ProviderDBV2Model.FK_ImagesTwo_Providers" FromRole="Provider" ToRole="ImagesTwo" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" />
+          <NavigationProperty Name="ArticlesComments" Relationship="ProviderDBV2Model.FK_ArticlesComments_Providers" FromRole="Provider" ToRole="ArticlesComment" />
         </EntityType>
         <Association Name="FK_Addresses_Customers">
           <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
@@ -525,7 +548,6 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
-          <EntitySet Name="Images" EntityType="ProviderDBV2Model.Image" />
           <EntitySet Name="ImagesTwoes" EntityType="ProviderDBV2Model.ImagesTwo" />
           <AssociationSet Name="FK_ImagesTwo_Customers" Association="ProviderDBV2Model.FK_ImagesTwo_Customers">
             <End Role="Customer" EntitySet="Customers" />
@@ -535,17 +557,12 @@
             <End Role="Provider" EntitySet="Providers" />
             <End Role="ImagesTwo" EntitySet="ImagesTwoes" />
           </AssociationSet>
+          <EntitySet Name="ArticlesComments" EntityType="ProviderDBV2Model.ArticlesComment" />
+          <AssociationSet Name="FK_ArticlesComments_Providers" Association="ProviderDBV2Model.FK_ArticlesComments_Providers">
+            <End Role="Provider" EntitySet="Providers" />
+            <End Role="ArticlesComment" EntitySet="ArticlesComments" />
+          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Image">
-          <Key>
-            <PropertyRef Name="ImageID" />
-          </Key>
-          <Property Name="ImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ImageBin" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="ImagIMG" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="CustomerID" Type="Int32" />
-          <Property Name="ProviderID" Type="Int32" />
-        </EntityType>
         <EntityType Name="ImagesTwo">
           <Key>
             <PropertyRef Name="ImageID" />
@@ -578,6 +595,29 @@
               <PropertyRef Name="ProviderID" />
             </Principal>
             <Dependent Role="ImagesTwo">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ArticlesComment">
+          <Key>
+            <PropertyRef Name="CommentID" />
+          </Key>
+          <Property Name="CommentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ThisDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ProviderID" Type="Int32" />
+          <Property Name="Rating" Type="Int32" />
+          <NavigationProperty Name="Provider" Relationship="ProviderDBV2Model.FK_ArticlesComments_Providers" FromRole="ArticlesComment" ToRole="Provider" />
+        </EntityType>
+        <Association Name="FK_ArticlesComments_Providers">
+          <End Type="ProviderDBV2Model.Provider" Role="Provider" Multiplicity="0..1" />
+          <End Type="ProviderDBV2Model.ArticlesComment" Role="ArticlesComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Provider">
+              <PropertyRef Name="ProviderID" />
+            </Principal>
+            <Dependent Role="ArticlesComment">
               <PropertyRef Name="ProviderID" />
             </Dependent>
           </ReferentialConstraint>
@@ -672,6 +712,9 @@
           <EntitySetMapping Name="Providers">
             <EntityTypeMapping TypeName="ProviderDBV2Model.Provider">
               <MappingFragment StoreEntitySet="Providers">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
                 <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
                 <ScalarProperty Name="ProviderPhone" ColumnName="ProviderPhone" />
@@ -688,17 +731,6 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="Images">
-            <EntityTypeMapping TypeName="ProviderDBV2Model.Image">
-              <MappingFragment StoreEntitySet="Images">
-                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="ImagIMG" ColumnName="ImagIMG" />
-                <ScalarProperty Name="ImageBin" ColumnName="ImageBin" />
-                <ScalarProperty Name="ImageID" ColumnName="ImageID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ImagesTwoes">
             <EntityTypeMapping TypeName="ProviderDBV2Model.ImagesTwo">
               <MappingFragment StoreEntitySet="ImagesTwo">
@@ -707,6 +739,17 @@
                 <ScalarProperty Name="ImageIMG" ColumnName="ImageIMG" />
                 <ScalarProperty Name="ImageBin" ColumnName="ImageBin" />
                 <ScalarProperty Name="ImageID" ColumnName="ImageID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ArticlesComments">
+            <EntityTypeMapping TypeName="ProviderDBV2Model.ArticlesComment">
+              <MappingFragment StoreEntitySet="ArticlesComments">
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="ThisDateTime" ColumnName="ThisDateTime" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="CommentID" ColumnName="CommentID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -20,10 +20,11 @@
         <AssociationConnector Association="ProviderDBV2Model.FK_Customers_AspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="ProviderDBV2Model.FK_Providers_AspNetUsers" ManuallyRouted="false" />
         <AssociationConnector Association="ProviderDBV2Model.AspNetUserRoles" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ProviderDBV2Model.Image" Width="1.5" PointX="0.75" PointY="3.75" />
         <EntityTypeShape EntityType="ProviderDBV2Model.ImagesTwo" Width="1.5" PointX="10.875" PointY="10.375" />
         <AssociationConnector Association="ProviderDBV2Model.FK_ImagesTwo_Customers" />
         <AssociationConnector Association="ProviderDBV2Model.FK_ImagesTwo_Providers" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.ArticlesComment" Width="1.5" PointX="7.5" PointY="14.5" />
+        <AssociationConnector Association="ProviderDBV2Model.FK_ArticlesComments_Providers" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
