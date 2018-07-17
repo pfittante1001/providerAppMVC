@@ -29,7 +29,7 @@
         });
 
         var marker = tomtom.L.marker([@ViewBag.Latitude, @ViewBag.Longitude]).addTo(map);
-        marker.bindPopup('The Gray Family');
+        marker.bindPopup("@ViewBag.Name");
 
     </script>
 </body>
