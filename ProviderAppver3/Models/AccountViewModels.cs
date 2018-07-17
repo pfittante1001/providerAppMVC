@@ -79,6 +79,8 @@ namespace ProviderAppver3.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Check if a provider")]
         public bool IsProvider { get; set; }
     }
 

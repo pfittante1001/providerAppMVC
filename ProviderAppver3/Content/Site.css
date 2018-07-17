@@ -22,3 +22,9 @@ select,
 textarea {
     max-width: 280px;
 }
+/*Style from carousel by Pete*/
+.carousel-inner img {
+    width: 100%;
+    height: 100%;
+}
+
