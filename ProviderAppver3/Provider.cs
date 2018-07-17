@@ -19,6 +19,7 @@ namespace ProviderAppver3
         {
             this.Addresses = new HashSet<Address>();
             this.ImagesTwoes = new HashSet<ImagesTwo>();
+            this.ArticlesComments = new HashSet<ArticlesComment>();
         }
     
         public int ProviderID { get; set; }
@@ -26,11 +27,16 @@ namespace ProviderAppver3
         public string ProviderPhone { get; set; }
         public string ProviderEmail { get; set; }
         public string UserName { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public Nullable<bool> Active { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Address> Addresses { get; set; }
         public virtual AspNetUser AspNetUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ImagesTwo> ImagesTwoes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ArticlesComment> ArticlesComments { get; set; }
     }
 }

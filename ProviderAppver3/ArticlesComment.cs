@@ -12,12 +12,14 @@ namespace ProviderAppver3
     using System;
     using System.Collections.Generic;
     
-    public partial class Image
+    public partial class ArticlesComment
     {
-        public int ImageID { get; set; }
-        public byte[] ImageBin { get; set; }
-        public byte[] ImagIMG { get; set; }
-        public Nullable<int> CustomerID { get; set; }
+        public int CommentID { get; set; }
+        public string Comments { get; set; }
+        public Nullable<System.DateTime> ThisDateTime { get; set; }
         public Nullable<int> ProviderID { get; set; }
+        public Nullable<int> Rating { get; set; }
+    
+        public virtual Provider Provider { get; set; }
     }
 }
