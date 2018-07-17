@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Providers Private Landing Page</h2>
+<h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -19,6 +19,15 @@
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ProviderEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Active)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.AspNetUser.Email)
@@ -36,6 +45,15 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.ProviderEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Active)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.AspNetUser.Email)

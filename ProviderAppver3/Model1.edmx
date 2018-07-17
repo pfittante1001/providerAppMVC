@@ -430,7 +430,7 @@
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" />
           <NavigationProperty Name="ArticlesComments" Relationship="ProviderDBV2Model.FK_ArticlesComments_Providers" FromRole="Provider" ToRole="ArticlesComment" />
-        </EntityType>
+          </EntityType>
         <Association Name="FK_Addresses_Customers">
           <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
           <End Role="Addresses" Type="Self.Address" Multiplicity="*" />
@@ -562,7 +562,7 @@
             <End Role="Provider" EntitySet="Providers" />
             <End Role="ArticlesComment" EntitySet="ArticlesComments" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <EntityType Name="ImagesTwo">
           <Key>
             <PropertyRef Name="ImageID" />
@@ -622,7 +622,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
