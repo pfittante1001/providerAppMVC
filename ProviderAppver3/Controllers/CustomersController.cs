@@ -15,6 +15,7 @@ namespace ProviderAppver3.Controllers
         private ProviderDBV2Entities db = new ProviderDBV2Entities();
 
         // GET: Customers
+        [Authorize]
         public ActionResult Index()
         {
             var customers = db.Customers.Include(c => c.AspNetUser);
@@ -22,6 +23,7 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Customers/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +39,7 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Customers/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.UserName = new SelectList(db.AspNetUsers, "Id", "Email");
@@ -48,6 +51,7 @@ namespace ProviderAppver3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "CustomerID,CustomerName,CustomerPhone,CustomerEmail,UserName")] Customer customer)
         {
             if (ModelState.IsValid)
@@ -62,6 +66,7 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Customers/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -82,6 +87,7 @@ namespace ProviderAppver3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "CustomerID,CustomerName,CustomerPhone,CustomerEmail,UserName")] Customer customer)
         {
             if (ModelState.IsValid)
@@ -95,6 +101,7 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Customers/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -112,6 +119,7 @@ namespace ProviderAppver3.Controllers
         // POST: Customers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult DeleteConfirmed(int id)
         {
             Customer customer = db.Customers.Find(id);

@@ -15,6 +15,7 @@ namespace ProviderAppver3.Controllers
         private ProviderDBV2Entities db = new ProviderDBV2Entities();
 
         // GET: Addresses
+        [Authorize]
         public ActionResult Index()
         {
             var addresses = db.Addresses.Include(a => a.Customer).Include(a => a.Provider);
@@ -22,6 +23,7 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Addresses/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -37,6 +39,7 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Addresses/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName");
@@ -49,6 +52,7 @@ namespace ProviderAppver3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create([Bind(Include = "AddressID,StreetNumber,StreetName,City,State,PostalCode,CustomerID,ProviderID")] Address address)
         {
             if (ModelState.IsValid)
@@ -64,6 +68,7 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Addresses/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -85,6 +90,7 @@ namespace ProviderAppver3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit([Bind(Include = "AddressID,StreetNumber,StreetName,City,State,PostalCode,CustomerID,ProviderID")] Address address)
         {
             if (ModelState.IsValid)
@@ -99,6 +105,7 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Addresses/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
