@@ -20,22 +20,23 @@
         <th>
             @Html.DisplayNameFor(model => model.ProviderEmail)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Active)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AspNetUser.Email)
-        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.AspNetUser.Email)
+            </th>*@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.ProviderName)
@@ -46,24 +47,29 @@
         <td>
             @Html.DisplayFor(modelItem => item.ProviderEmail)
         </td>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.Title)
-        </td>
+        </td>*@
         <td>
             @Html.DisplayFor(modelItem => item.Description)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Active)
         </td>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.AspNetUser.Email)
-        </td>
+        </td>*@
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ProviderID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ProviderID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ProviderID })
+            @Html.ActionLink("Upload Images", "Create", "ImagesTwoes")
+            @Html.ActionLink("Edit", "Edit", new { id = item.ProviderID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ProviderID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ProviderID })
         </td>
     </tr>
-}
 
+    }
+   
+   
 </table>
+
+

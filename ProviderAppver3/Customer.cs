@@ -26,6 +26,7 @@ namespace ProviderAppver3
         public string CustomerPhone { get; set; }
         public string CustomerEmail { get; set; }
         public string UserName { get; set; }
+        public Nullable<int> IsSnow { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Address> Addresses { get; set; }

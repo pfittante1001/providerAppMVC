@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using GoogleMaps.LocationServices;
 using Microsoft.AspNet.Identity;
 using ProviderAppver3;
 
@@ -20,6 +21,7 @@ namespace ProviderAppver3.Controllers
         public ActionResult Index()
         {
             var customers = db.Customers.Include(c => c.AspNetUser);
+            
             return View(customers.ToList());
         }
 
