@@ -4,6 +4,16 @@
     ViewBag.Title = "Details";
 }
 
+<link href="~/Content/tomtomsdk/map.css" rel="stylesheet" />
+<script src="~/Content/tomtomsdk/tomtom.min.js"></script>
+<style>
+
+    #map {
+        height: 500px;
+        width: 500px;
+    }
+</style>
+
 <h2>Details</h2>
 
 <div>
@@ -44,7 +54,28 @@
 
     </dl>
 </div>
+
+<h2>Maps</h2>
+<div id='map'></div>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+
+<script>
+        var map = tomtom.L.map('map', {
+            key: '7MHaIyzmWO124c9GU02OAGJPvcpyMtwo',
+            basePath: 'sdk',
+            center: [@ViewBag.Latitude, @ViewBag.Longitude],
+            zoom: 16,
+        });
+
+        var marker = tomtom.L.marker([@ViewBag.Latitude, @ViewBag.Longitude]).addTo(map);
+        marker.bindPopup("@ViewBag.Name");
+
+       
+
+
+</script>

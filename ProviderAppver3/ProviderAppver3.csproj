@@ -1780,7 +1780,6 @@
     <Content Include="Views\ImagesTwoes\Details.cshtml" />
     <Content Include="Views\ImagesTwoes\Edit.cshtml" />
     <Content Include="Views\ImagesTwoes\Index.cshtml" />
-    <Content Include="Views\Maps.cshtml" />
     <Content Include="Views\Home\Maps.cshtml" />
   </ItemGroup>
   <ItemGroup>
