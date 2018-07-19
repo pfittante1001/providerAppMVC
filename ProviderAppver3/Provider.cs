@@ -30,6 +30,7 @@ namespace ProviderAppver3
         public string Title { get; set; }
         public string Description { get; set; }
         public Nullable<bool> Active { get; set; }
+        public Nullable<bool> IsSnow { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Address> Addresses { get; set; }
