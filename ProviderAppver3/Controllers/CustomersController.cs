@@ -38,6 +38,21 @@ namespace ProviderAppver3.Controllers
             {
                 return HttpNotFound();
             }
+            string name = customer.CustomerName;
+            int custid = (from a in db.Addresses where a.CustomerID == id select a.AddressID).First();
+            Address location = db.Addresses.Find(custid);
+            string num = location.StreetNumber;
+            string street = location.StreetName;
+            string city = location.City;
+            string state = location.State;
+            var address = num + " " + street + ", " + city + ", " + state;
+            var locationService = new GoogleLocationService();
+            var point = locationService.GetLatLongFromAddress(address);
+            var latitude = point.Latitude;
+            var longitude = point.Longitude;
+            ViewBag.Latitude = latitude;
+            ViewBag.Longitude = longitude;
+            ViewBag.Name = name;
             return View(customer);
         }
 

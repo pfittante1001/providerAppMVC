@@ -4,45 +4,36 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
 
-<div>
-    <h4>Customer</h4>
+
+<div class="row">
+    <div class="col">
+        <h4 style="display:inline-block">Welcome @ViewBag.Name</h4>
+    </div>
+</div>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerName)
-        </dt>
-
-        <dd>
+    <div class="row">
+        <div class="col-2">
             @Html.DisplayFor(model => model.CustomerName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerPhone)
-        </dt>
-
-        <dd>
+        </div>
+        <div class="col-2">
             @Html.DisplayFor(model => model.CustomerPhone)
-        </dd>
+        </div>
+        
+        <div class="col-8" id='map'></div>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerEmail)
-        </dt>
+    <script>
+        var map = tomtom.L.map('map', {
+            key: '7MHaIyzmWO124c9GU02OAGJPvcpyMtwo',
+            basePath: 'sdk',
+            center: [@ViewBag.Latitude, @ViewBag.Longitude],
+            zoom: 16,
+        });
 
-        <dd>
-            @Html.DisplayFor(model => model.CustomerEmail)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AspNetUser.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AspNetUser.Email)
-        </dd>
-
-    </dl>
+        var marker = tomtom.L.marker([@ViewBag.Latitude, @ViewBag.Longitude]).addTo(map);
+        marker.bindPopup("@ViewBag.Name");
+    </script>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
