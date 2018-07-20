@@ -90,3 +90,13 @@ div#map {
     height: 500px;
     width: 500px;
 }
+.my-div-icon {
+    height: 20px !important;
+    width: 20px !important;
+    background-color: yellow;
+    border-radius: 50%;
+    border-color: blue;
+    border: 2px solid blue;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    z-index: 9999;
+}
