@@ -67,7 +67,7 @@ namespace ProviderAppver3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProviderID,ProviderName,ProviderPhone,ProviderEmail,UserName,Title,Description,Active")] Provider provider)
+        public ActionResult Create([Bind(Include = "ProviderID,ProviderName,ProviderPhone,ProviderEmail,UserName,Title,Description,Active,IsSnow")] Provider provider)
         {
             if (ModelState.IsValid)
             {

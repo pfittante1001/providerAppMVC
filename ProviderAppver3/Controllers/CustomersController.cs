@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using GoogleMaps.LocationServices;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using ProviderAppver3;
 
 namespace ProviderAppver3.Controllers
@@ -21,7 +22,7 @@ namespace ProviderAppver3.Controllers
         public ActionResult Index()
         {
             var customers = db.Customers.Include(c => c.AspNetUser);
-            
+
             return View(customers.ToList());
         }
 
@@ -154,6 +155,54 @@ namespace ProviderAppver3.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public JsonResult GetSnowProviders()
+        {
+            var snowproviders = (from p in db.Providers
+                                 where p.IsSnow == true &&
+                                 p.Active == true
+                                 select p.ProviderID).ToArray();
+            Object[] result = new Object[snowproviders.Length];
+            int i = 0;
+            foreach (int provider in snowproviders)
+            {
+                string providername = (from p in db.Providers
+                                       where p.ProviderID == provider
+                                       select p.ProviderName).First().ToString();
+
+                string num = (from a in db.Addresses
+                              where a.ProviderID == provider
+                              select a.StreetNumber).First();
+                string street = (from a in db.Addresses
+                                 where a.ProviderID == provider
+                                 select a.StreetName).First();
+                string city = (from a in db.Addresses
+                               where a.ProviderID == provider
+                               select a.City).First();
+                string state = (from a in db.Addresses
+                                where a.ProviderID == provider
+                                select a.State).First();
+                var address = num + " " + street + ", " + city + ", " + state;
+                var locationService = new GoogleLocationService();
+                var point = locationService.GetLatLongFromAddress(address);
+
+                var lat = point.Latitude.ToString();
+                var log = point.Longitude.ToString();
+                Provider snowprovider = new Provider()
+                {
+                    ProviderName = providername,
+                    Title = lat,
+                    Description = log
+                };
+
+                result[i] = snowprovider;
+                i++;
+            }
+
+
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

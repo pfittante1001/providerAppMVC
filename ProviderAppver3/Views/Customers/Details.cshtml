@@ -1,41 +1,68 @@
 ﻿@model ProviderAppver3.Customer
-
 @{
     ViewBag.Title = "Details";
 }
-
-
 
 <div class="row">
     <div class="col">
         <h4 style="display:inline-block">Welcome @ViewBag.Name</h4>
     </div>
 </div>
-    <hr />
+<hr />
+<div class="row">
+    <div class="col-2">
+        @Html.DisplayFor(model => model.CustomerName)
+    </div>
+    <div class="col-2">
+        @Html.DisplayFor(model => model.CustomerPhone)
+    </div>
+    <div class="col-8"></div>
     <div class="row">
-        <div class="col-2">
-            @Html.DisplayFor(model => model.CustomerName)
-        </div>
-        <div class="col-2">
-            @Html.DisplayFor(model => model.CustomerPhone)
-        </div>
-        
-        <div class="col-8" id='map'></div>
+        <div class="col-2"></div>
+        <div class="col-8" id='map' style="height:70vh; width: 50vw; position:center"></div>
+        <div class="col-2"></div>
     </div>
 
-    <script>
-        var map = tomtom.L.map('map', {
-            key: '7MHaIyzmWO124c9GU02OAGJPvcpyMtwo',
-            basePath: 'sdk',
-            center: [@ViewBag.Latitude, @ViewBag.Longitude],
-            zoom: 16,
-        });
-
-        var marker = tomtom.L.marker([@ViewBag.Latitude, @ViewBag.Longitude]).addTo(map);
-        marker.bindPopup("@ViewBag.Name");
-    </script>
+    <div class="selectService">
+        <div class="row">
+            <div class="col">
+                <button class="button button2" id="snow" onclick="LoadSnowProviders()">Snow Plow Service</button>
+            </div>
+        </div>
+    </div>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+        var map = tomtom.L.map('map', {
+            key: '7MHaIyzmWO124c9GU02OAGJPvcpyMtwo',
+            basePath: 'sdk',
+            center: [@ViewBag.Latitude, @ViewBag.Longitude],
+            zoom: 15,
+        });
+
+    var myIcon = L.divIcon({ className: 'my-div-icon' });
+
+    var marker = tomtom.L.marker([@ViewBag.Latitude, @ViewBag.Longitude], {icon: myIcon}).addTo(map);
+        marker.bindPopup("@ViewBag.Name");
+
+    function LoadSnowProviders() {
+        $.post('/Customers/GetSnowProviders', function (providers) {
+            console.log(providers);
+            addMarkersToMap(providers);
+        });       
+    } 
+
+    function addMarkersToMap(providers) {
+        for (var i = 0; i < providers.length; i++)
+        {
+           var marker = tomtom.L.marker([providers[i].Title, providers[i].Description]).addTo(map);
+           marker.bindPopup(providers[i].ProviderName)
+        }
+
+    }
+    
+</script>
