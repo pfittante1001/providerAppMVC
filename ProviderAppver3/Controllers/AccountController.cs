@@ -103,6 +103,7 @@ namespace ProviderAppver3.Controllers
                         var queryTwo = (from key in db.Customers
                                         where key.UserName == queryOne
                                         select key.CustomerID).Single();
+                 
                         return RedirectToAction("Details", "Customers", new { id = queryTwo });
                     }
 
@@ -455,6 +456,36 @@ namespace ProviderAppver3.Controllers
 
             base.Dispose(disposing);
         }
+        public ActionResult CheckAuth()
+        {
+            string userId = User.Identity.GetUserId();
+            ProviderDBV2Entities db = new ProviderDBV2Entities();
+            var queryOne = (from key in db.AspNetUsers
+                            where userId == key.Id
+                            select key.Id).Single();
+
+
+
+            var queryThree = (from key in db.AspNetUsers
+                              where key.Id == queryOne
+                              select key.IsProvider).Single();
+                if (queryThree.Equals(true))
+                {
+                    var queryFour = (from key in db.Providers
+                                        where key.UserName == queryOne
+                                        select key.ProviderID).Single();
+
+                    return RedirectToAction("Details", "Providers", new { id = queryFour });
+                }
+                else
+                {
+                    var queryTwo = (from key in db.Customers
+                                    where key.UserName == queryOne
+                                    select key.CustomerID).Single();
+
+                    return RedirectToAction("Details", "Customers", new { id = queryTwo });
+                }
+            }
 
         #region Helpers
         // Used for XSRF protection when adding external logins

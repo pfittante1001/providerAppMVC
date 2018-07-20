@@ -68,7 +68,14 @@ namespace ProviderAppver3.Controllers
                 }
                 db.Addresses.Add(address);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                if ((bool)provider)
+                {
+                    return RedirectToAction("Details", "Providers", new { id = address.ProviderID });
+                }
+                else
+                {
+                    return RedirectToAction("Details", "Customers", new { id = address.CustomerID });
+                }
             }
 
             return View(address);

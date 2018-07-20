@@ -14,10 +14,9 @@
     <hr />
     <div class="row">
         <div class="col-2">
-            @Html.DisplayFor(model => model.CustomerName)
+            <button class="button button2" onclick="LoadSnowProviders()">Snow Plow Services</button>
         </div>
         <div class="col-2">
-            <button class="button button2" onclick="LoadSnowProviders()">Find Snow Plow Providers</button>
         </div>
         
         <div class="col-8" id='map'></div>
@@ -35,7 +34,7 @@
 
     var marker = tomtom.L.marker([@ViewBag.Latitude, @ViewBag.Longitude], {icon: myIcon}).addTo(map);
         marker.bindPopup("@ViewBag.Name");
-
+   
     function LoadSnowProviders() {
         $.post('/Customers/GetSnowProviders', function (providers) {
             console.log(providers);

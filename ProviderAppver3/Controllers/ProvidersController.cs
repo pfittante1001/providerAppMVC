@@ -73,7 +73,7 @@ namespace ProviderAppver3.Controllers
             {
                 db.Providers.Add(provider);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Create", "Addresses");
             }
 
             ViewBag.UserName = new SelectList(db.AspNetUsers, "Id", "Email", provider.UserName);

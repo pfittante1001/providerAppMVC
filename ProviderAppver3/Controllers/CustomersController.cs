@@ -40,6 +40,7 @@ namespace ProviderAppver3.Controllers
             }
             string name = customer.CustomerName;
             int custid = (from a in db.Addresses where a.CustomerID == id select a.AddressID).First();
+            ViewBag.CID = id;
             Address location = db.Addresses.Find(custid);
             string num = location.StreetNumber;
             string street = location.StreetName;
