@@ -100,3 +100,11 @@ div#map {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     z-index: 9999;
 }
+/*pete style navbar loginregister*/
+#registerLink{
+    margin-left:15px;
+    margin-right:15px;
+}
+li#login{
+    margin-top:7px;
+}
