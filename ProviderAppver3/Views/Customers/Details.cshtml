@@ -19,7 +19,7 @@
     <div class="col-8"></div>
     <div class="row">
         <div class="col-2"></div>
-        <div class="col-8" id='map' style="height:70vh; width: 50vw; position:center"></div>
+        <div class="col-8 use-all-space" id='map' ondblclick="GoToProvider()"></div>
         <div class="col-2"></div>
     </div>
 
@@ -46,8 +46,8 @@
 
     var myIcon = L.divIcon({ className: 'my-div-icon' });
 
-    var marker = tomtom.L.marker([@ViewBag.Latitude, @ViewBag.Longitude], {icon: myIcon}).addTo(map);
-        marker.bindPopup("@ViewBag.Name");
+    var marker = tomtom.L.marker([@ViewBag.Latitude, @ViewBag.Longitude], { icon: myIcon }).addTo(map);
+    marker.bindPopup("@ViewBag.Name");
 
     function LoadSnowProviders() {
         $.post('/Customers/GetSnowProviders', function (providers) {
@@ -62,7 +62,10 @@
            var marker = tomtom.L.marker([providers[i].Title, providers[i].Description]).addTo(map);
            marker.bindPopup(providers[i].ProviderName)
         }
-
     }
+
+    
+
+    
     
 </script>

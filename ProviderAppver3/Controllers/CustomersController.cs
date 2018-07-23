@@ -193,16 +193,16 @@ namespace ProviderAppver3.Controllers
                 {
                     ProviderName = providername,
                     Title = lat,
-                    Description = log
+                    Description = log,
+                    ProviderID = provider
                 };
 
                 result[i] = snowprovider;
                 i++;
             }
 
-
-
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }
+
