@@ -73,7 +73,7 @@ namespace ProviderAppver3.Controllers
             {
                 db.Providers.Add(provider);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Create", "Addresses");
             }
 
             ViewBag.UserName = new SelectList(db.AspNetUsers, "Id", "Email", provider.UserName);
@@ -101,7 +101,7 @@ namespace ProviderAppver3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProviderID,ProviderName,ProviderPhone,ProviderEmail,UserName,Title,Description,Active")] Provider provider)
+        public ActionResult Edit([Bind(Include = "ProviderID,ProviderName,ProviderPhone,ProviderEmail,UserName,Title,Description,Active,IsSnow")] Provider provider)
         {
             if (ModelState.IsValid)
             {

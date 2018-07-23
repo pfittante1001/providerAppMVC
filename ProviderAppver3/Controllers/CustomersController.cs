@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Mvc;
 using GoogleMaps.LocationServices;
 using Microsoft.AspNet.Identity;
-using Newtonsoft.Json;
 using ProviderAppver3;
 
 namespace ProviderAppver3.Controllers
@@ -22,7 +21,7 @@ namespace ProviderAppver3.Controllers
         public ActionResult Index()
         {
             var customers = db.Customers.Include(c => c.AspNetUser);
-
+            
             return View(customers.ToList());
         }
 
@@ -41,6 +40,7 @@ namespace ProviderAppver3.Controllers
             }
             string name = customer.CustomerName;
             int custid = (from a in db.Addresses where a.CustomerID == id select a.AddressID).First();
+            ViewBag.CID = id;
             Address location = db.Addresses.Find(custid);
             string num = location.StreetNumber;
             string street = location.StreetName;
@@ -156,7 +156,6 @@ namespace ProviderAppver3.Controllers
             }
             base.Dispose(disposing);
         }
-
         public JsonResult GetSnowProviders()
         {
             var snowproviders = (from p in db.Providers
@@ -193,13 +192,14 @@ namespace ProviderAppver3.Controllers
                 {
                     ProviderName = providername,
                     Title = lat,
-                    Description = log,
-                    ProviderID = provider
+                    Description = log
                 };
 
                 result[i] = snowprovider;
                 i++;
             }
+
+
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
