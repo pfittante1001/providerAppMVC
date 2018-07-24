@@ -47,12 +47,7 @@ namespace ProviderAppver3.Controllers
             string city = location.City;
             string state = location.State;
             var address = num + " " + street + ", " + city + ", " + state;
-            var locationService = new GoogleLocationService();
-            var point = locationService.GetLatLongFromAddress(address);
-            var latitude = point.Latitude;
-            var longitude = point.Longitude;
-            ViewBag.Latitude = latitude;
-            ViewBag.Longitude = longitude;
+            ViewBag.Address = address;
             ViewBag.Name = name;
             return View(customer);
         }
@@ -183,16 +178,12 @@ namespace ProviderAppver3.Controllers
                                 where a.ProviderID == provider
                                 select a.State).First();
                 var address = num + " " + street + ", " + city + ", " + state;
-                var locationService = new GoogleLocationService();
-                var point = locationService.GetLatLongFromAddress(address);
 
-                var lat = point.Latitude.ToString();
-                var log = point.Longitude.ToString();
                 Provider snowprovider = new Provider()
                 {
                     ProviderName = providername,
-                    Title = lat,
-                    Description = log
+                    Description = address,
+                    ProviderID = provider
                 };
 
                 result[i] = snowprovider;
