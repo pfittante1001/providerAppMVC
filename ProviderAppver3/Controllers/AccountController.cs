@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -22,7 +22,7 @@ namespace ProviderAppver3.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +34,9 @@ namespace ProviderAppver3.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -79,22 +79,22 @@ namespace ProviderAppver3.Controllers
 
             ProviderDBV2Entities db = new ProviderDBV2Entities();
             var queryOne = (from key in db.AspNetUsers
-                        where model.Email == key.Email
-                        select key.Id).Single();
+                            where model.Email == key.Email
+                            select key.Id).Single();
 
-            
+
 
             var queryThree = (from key in db.AspNetUsers
-                           where key.Id == queryOne
-                           select key.IsProvider).Single();
+                              where key.Id == queryOne
+                              select key.IsProvider).Single();
             switch (result)
             {
                 case SignInStatus.Success:
                     if (queryThree.Equals(true))
                     {
                         var queryFour = (from key in db.Providers
-                                        where key.UserName == queryOne
-                                        select key.ProviderID).Single();
+                                         where key.UserName == queryOne
+                                         select key.ProviderID).Single();
 
                         return RedirectToAction("Details", "Providers", new { id = queryFour });
                     }
@@ -103,9 +103,10 @@ namespace ProviderAppver3.Controllers
                         var queryTwo = (from key in db.Customers
                                         where key.UserName == queryOne
                                         select key.CustomerID).Single();
-                 
                         return RedirectToAction("Details", "Customers", new { id = queryTwo });
                     }
+
+
 
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -147,7 +148,7 @@ namespace ProviderAppver3.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -182,7 +183,7 @@ namespace ProviderAppver3.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -456,36 +457,6 @@ namespace ProviderAppver3.Controllers
 
             base.Dispose(disposing);
         }
-        public ActionResult CheckAuth()
-        {
-            string userId = User.Identity.GetUserId();
-            ProviderDBV2Entities db = new ProviderDBV2Entities();
-            var queryOne = (from key in db.AspNetUsers
-                            where userId == key.Id
-                            select key.Id).Single();
-
-
-
-            var queryThree = (from key in db.AspNetUsers
-                              where key.Id == queryOne
-                              select key.IsProvider).Single();
-                if (queryThree.Equals(true))
-                {
-                    var queryFour = (from key in db.Providers
-                                        where key.UserName == queryOne
-                                        select key.ProviderID).Single();
-
-                    return RedirectToAction("Details", "Providers", new { id = queryFour });
-                }
-                else
-                {
-                    var queryTwo = (from key in db.Customers
-                                    where key.UserName == queryOne
-                                    select key.CustomerID).Single();
-
-                    return RedirectToAction("Details", "Customers", new { id = queryTwo });
-                }
-            }
 
         #region Helpers
         // Used for XSRF protection when adding external logins

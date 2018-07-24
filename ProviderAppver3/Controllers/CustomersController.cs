@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -41,18 +41,20 @@ namespace ProviderAppver3.Controllers
             string name = customer.CustomerName;
             int custid = (from a in db.Addresses where a.CustomerID == id select a.AddressID).First();
             ViewBag.CID = id;
-            //Address location = db.Addresses.Find(custid);
-            //string num = location.StreetNumber;
-            //string street = location.StreetName;
-            //string city = location.City;
-            //string state = location.State;
-            //var address = num + " " + street + ", " + city + ", " + state;
-            //var locationService = new GoogleLocationService();
-            //var point = locationService.GetLatLongFromAddress(address);
-            //var latitude = point.Latitude;
-            //var longitude = point.Longitude;
-            //ViewBag.Latitude = latitude;
-            //ViewBag.Longitude = longitude;
+
+            Address location = db.Addresses.Find(custid);
+            string num = location.StreetNumber;
+            string street = location.StreetName;
+            string city = location.City;
+            string state = location.State;
+            var address = num + " " + street + ", " + city + ", " + state;
+            var locationService = new GoogleLocationService();
+            var point = locationService.GetLatLongFromAddress(address);
+            var latitude = point.Latitude;
+            var longitude = point.Longitude;
+            ViewBag.Latitude = latitude;
+            ViewBag.Longitude = longitude;      
+            ViewBag.Address = address;
             ViewBag.Name = name;
             return View(customer);
         }
@@ -182,17 +184,14 @@ namespace ProviderAppver3.Controllers
                 string state = (from a in db.Addresses
                                 where a.ProviderID == provider
                                 select a.State).First();
-                var address = num + " " + street + ", " + city + ", " + state;
-                var locationService = new GoogleLocationService();
-                var point = locationService.GetLatLongFromAddress(address);
+                street = street.Replace(" ", "%20");
+                
+                var address = num + "%20" + street + "%20" + city + "%20" + state;
 
-                var lat = point.Latitude.ToString();
-                var log = point.Longitude.ToString();
-                Provider snowprovider = new Provider()
-                {
+                Provider snowprovider = new Provider() { 
                     ProviderName = providername,
-                    Title = lat,
-                    Description = log
+                    Description = address,
+                    ProviderID = provider
                 };
 
                 result[i] = snowprovider;
@@ -205,3 +204,4 @@ namespace ProviderAppver3.Controllers
         }
     }
 }
+
