@@ -177,10 +177,11 @@ namespace ProviderAppver3.Controllers
                 string state = (from a in db.Addresses
                                 where a.ProviderID == provider
                                 select a.State).First();
-                var address = num + " " + street + ", " + city + ", " + state;
+                street = street.Replace(" ", "%20");
+                
+                var address = num + "%20" + street + "%20" + city + "%20" + state;
 
-                Provider snowprovider = new Provider()
-                {
+                Provider snowprovider = new Provider() { 
                     ProviderName = providername,
                     Description = address,
                     ProviderID = provider

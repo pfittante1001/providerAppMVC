@@ -49,7 +49,7 @@
         LoadMap(ourdata)
         };
         OurRequest.send();
-    
+
     function LoadMap(results) {
         L.mapquest.key = 'b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6';
 
@@ -83,33 +83,47 @@
     }
 
     function addMarkersToMap(providers) {
+        var RequestUrl = 'www.mapquestapi.com/geocoding/v1/batch?&inFormat=kvp&outFormat=json&thumbMaps=false&maxResults=1&location=';
         for (var i = 0; i < providers.length; i++) {
-            var OurRequest = new XMLHttpRequest()
-            OurRequest.open('Get', 'http://www.mapquestapi.com/geocoding/v1/address?key=b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6&location=' + providers[i].Description)
-            OurRequest.onload = function () {
-                var custdata = JSON.parse(OurRequest.responseText);
-                console.log(custdata)
-                CreateCustMarker(custdata);
-            };
-            OurRequest.send();
-
-            function CreateCustMarker(custdata) {
-                var marker = L.mapquest.textMarker([custdata.results[0].locations[0].displayLatLng.lat, custdata.results[0].locations[0].displayLatLng.lng], {
-                    text: providers[i].ProviderName,
-                    position: 'right',
-                    type: 'marker',
-                    icon: {
-                        primaryColor: '#555555',
-                        secondaryColor: '#333333',
-                        size: 'sm'
-                    }
-                });
-
-                marker.addTo(map);
+            if (i == 0) {
+                RequestUrl += providers[i].Description;
             }
+            else {
+                RequestUrl += '&location=' + providers[i].Description;
+            }
+            console.log(providers[i].Description)
         }
-    }
+        RequestUrl += '&key=b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6'
+        console.log(RequestUrl);
+        var OurRequest = new XMLHttpRequest()
+        OurRequest.open('Get', 'http://' + RequestUrl)
+        OurRequest.onload = function () {
+            var custdata = JSON.parse(OurRequest.responseText);
+            console.log(custdata)
+            CreateCustMarker(custdata, providers);
+        };
+        OurRequest.send();
 
+    };
+
+
+    function CreateCustMarker(custdata, providers) {
+        for (var i = 0; i < providers.length; i++) {
+
+        
+                    var marker = L.mapquest.textMarker([custdata.results[i].locations[0].displayLatLng.lat, custdata.results[i].locations[0].displayLatLng.lng], {
+                        text: providers[i].ProviderName,
+                        position: 'right',
+                        type: 'marker',
+                        icon: {
+                            primaryColor: '#3582ff',
+                            secondaryColor: '#ff3535',
+                            size: 'sm'
+                        }
+                    });
+                marker.addTo(map);
+         };
+    }
 
 
 
