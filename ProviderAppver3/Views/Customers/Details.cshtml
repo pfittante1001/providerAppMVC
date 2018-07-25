@@ -12,27 +12,24 @@
     </div>
 </div>
 <hr />
-<div class="row">
-    <div class="col-2">
-        @Html.DisplayFor(model => model.CustomerName)
+<div class="row" >
+    <div class="col-3 serviceBttn">
+        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Snow Plow Service</button>
     </div>
-    <div class="col-2">
-        @Html.DisplayFor(model => model.CustomerPhone)
+    <div class="col-3 serviceBttn">
+        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Lawn Service</button>
     </div>
-    <div class="col-8"></div>
-    <div class="row">
-        <div class="col-2"></div>
-        <div class="col-8" style="height:500px; width:500px" id='map'></div>
-        <div class="col-2"></div>
+    <div class="col-3 serviceBttn">
+        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Auto Service</button>
     </div>
-    <div class="selectService">
-        <div class="row">
-            <div class="col">
-                <button class="button button2" id="snow" onclick="LoadSnowProviders()">Snow Plow Service</button>
-            </div>
-        </div>
+    <div class="col-3 serviceBttn">
+        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Towing Service</button>
     </div>
 </div>
+<div class="row">      
+    <div class="col" id='map'></div>    
+</div>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
     @Html.ActionLink("Back to List", "Index")

@@ -78,45 +78,47 @@ namespace ProviderAppver3.Controllers
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
 
             ProviderDBV2Entities db = new ProviderDBV2Entities();
-            var queryOne = (from key in db.AspNetUsers
-                            where model.Email == key.Email
-                            select key.Id).Single();
-
-
-
-            var queryThree = (from key in db.AspNetUsers
-                              where key.Id == queryOne
-                              select key.IsProvider).Single();
-            switch (result)
+            if (db.AspNetUsers != null)
             {
-                case SignInStatus.Success:
-                    if (queryThree.Equals(true))
-                    {
-                        var queryFour = (from key in db.Providers
-                                         where key.UserName == queryOne
-                                         select key.ProviderID).Single();
-
-                        return RedirectToAction("Details", "Providers", new { id = queryFour });
-                    }
-                    else
-                    {
-                        var queryTwo = (from key in db.Customers
-                                        where key.UserName == queryOne
-                                        select key.CustomerID).Single();
-                        return RedirectToAction("Details", "Customers", new { id = queryTwo });
-                    }
+                var queryOne = (from key in db.AspNetUsers
+                                where model.Email == key.Email
+                                select key.Id).Single();
 
 
 
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                var queryThree = (from key in db.AspNetUsers
+                                  where key.Id == queryOne
+                                  select key.IsProvider).Single();
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        if (queryThree.Equals(true))
+                        {
+                            var queryFour = (from key in db.Providers
+                                             where key.UserName == queryOne
+                                             select key.ProviderID).Single();
+
+                            return RedirectToAction("Details", "Providers", new { id = queryFour });
+                        }
+                        else
+                        {
+                            var queryTwo = (from key in db.Customers
+                                            where key.UserName == queryOne
+                                            select key.CustomerID).Single();
+                            return RedirectToAction("Details", "Customers", new { id = queryTwo });
+                        }
+
+                    case SignInStatus.LockedOut:
+                        return View("Lockout");
+                    case SignInStatus.RequiresVerification:
+                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(model);
+                }
             }
+            return View(model);
         }
 
         //
