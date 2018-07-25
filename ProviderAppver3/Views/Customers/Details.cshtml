@@ -107,7 +107,7 @@
     function CreateCustMarker(custdata, providers) {
         for (var i = 0; i < providers.length; i++) {
 
-        
+
                     var marker = L.mapquest.textMarker([custdata.results[i].locations[0].displayLatLng.lat, custdata.results[i].locations[0].displayLatLng.lng], {
                         text: providers[i].ProviderName,
                         position: 'right',

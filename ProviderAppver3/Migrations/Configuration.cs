@@ -9,7 +9,7 @@ namespace ProviderAppver3.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(ProviderAppver3.Models.ApplicationDbContext context)
