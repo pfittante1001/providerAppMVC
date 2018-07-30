@@ -48,12 +48,6 @@ namespace ProviderAppver3.Controllers
             string city = location.City;
             string state = location.State;
             var address = num + " " + street + ", " + city + ", " + state;
-            var locationService = new GoogleLocationService();
-            var point = locationService.GetLatLongFromAddress(address);
-            var latitude = point.Latitude;
-            var longitude = point.Longitude;
-            ViewBag.Latitude = latitude;
-            ViewBag.Longitude = longitude;      
             ViewBag.Address = address;
             ViewBag.Name = name;
             return View(customer);
@@ -184,6 +178,9 @@ namespace ProviderAppver3.Controllers
                 string state = (from a in db.Addresses
                                 where a.ProviderID == provider
                                 select a.State).First();
+                string rate = (from r in db.ArticlesComments
+                               where r.ProviderID == provider
+                               select r.Rating).Average().ToString();
                 street = street.Replace(" ", "%20");
                 
                 var address = num + "%20" + street + "%20" + city + "%20" + state;
@@ -191,7 +188,8 @@ namespace ProviderAppver3.Controllers
                 Provider snowprovider = new Provider() { 
                     ProviderName = providername,
                     Description = address,
-                    ProviderID = provider
+                    ProviderID = provider,
+                    ProviderPhone = rate
                 };
 
                 result[i] = snowprovider;

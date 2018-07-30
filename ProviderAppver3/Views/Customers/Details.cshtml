@@ -156,13 +156,16 @@
         });
         marker.addTo(map);
     };
-        function onClick(e) {
-        alert("this works")
+        function onClick(p) {
+            alert(p.ProviderName + ' has ' + p.ProviderPhone + ' stars');
             
-    }
+        }
+
+        var providers;
     function LoadSnowProviders() {
         $.post('/Customers/GetSnowProviders', function (providers) {
             console.log(providers);
+            providers = providers;
             addMarkersToMap(providers);
         });
     }
@@ -198,10 +201,25 @@
                         icon: {
                             primaryColor: '#3582ff',
                             secondaryColor: '#ff3535',
-                            size: 'sm'
+                            size: 'sm'c
                         }
-                    });
-                marker.addTo(map).on('mouseover', onClick);
-         };
+            });
+
+            var rate = providers[i].ProviderPhone;
+            var rating = rate + '/5 Stars'
+            if (rate == 0) {
+                rating = "This Provider has not yet been rated"
+            }
+            var pid = providers[i].ProviderID;
+            console.log(pid)
+            var text = providers[i].ProviderName;
+            var link = '<a href="/Providers/Details/1" target="_blank" style="font-size:20px">name</a>';
+            link = link.replace('name', text);
+            link = link.replace('1', pid);
+            marker.addTo(map);
+            marker.bindPopup(link + '<br/>' + rating).addTo(map);
+                
+        } 
     }
+    
 </script>
