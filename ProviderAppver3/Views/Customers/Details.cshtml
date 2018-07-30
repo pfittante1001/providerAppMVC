@@ -14,16 +14,16 @@
 <hr />
 <div class="row" >
     <div class="col-3 serviceBttn">
-        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Snow Plow Service</button>
+        <button class="button button2" onfocus="ClearMap()" onclick="LoadSnowProviders()">Snow Plow Service</button>
     </div>
     <div class="col-3 serviceBttn">
-        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Lawn Service</button>
+        <button class="button button2" onfocus="ClearMap()" onclick="LoadLawnProviders()">Lawn Service</button>
     </div>
     <div class="col-3 serviceBttn">
-        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Auto Service</button>
+        <button class="button button2" onfocus="ClearMap()" onclick="LoadAutoProviders()">Auto Service</button>
     </div>
     <div class="col-3 serviceBttn">
-        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Towing Service</button>
+        <button class="button button2" onfocus="ClearMap()" onclick="LoadTowProviders()">Towing Service</button>
     </div>
 </div>
 <div class="row">      
@@ -35,94 +35,6 @@
     @Html.ActionLink("Back to List", "Index")
 </p>
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-@*<script>
-
-    var map;
-        var OurRequest = new XMLHttpRequest()
-        OurRequest.open('Get', 'http://www.mapquestapi.com/geocoding/v1/address?key=b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6&location=' + '@ViewBag.Address')
-    OurRequest.onload = function () {
-        var ourdata = JSON.parse(OurRequest.responseText);
-        console.log(ourdata)
-        LoadMap(ourdata)
-        };
-        OurRequest.send();
-
-    function LoadMap(results) {
-        L.mapquest.key = 'b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6';
-
-        // 'map' refers to a <div> element with the ID map
-        map = L.mapquest.map('map', {
-            center: [results.results[0].locations[0].displayLatLng.lat, results.results[0].locations[0].displayLatLng.lng],
-            layers: L.mapquest.tileLayer('map'),
-            zoom: 15
-        });
-
-        var marker = L.mapquest.textMarker([results.results[0].locations[0].displayLatLng.lat, results.results[0].locations[0].displayLatLng.lng], {
-            text: '@ViewBag.Name',
-            position: 'right',
-            type: 'marker',
-            icon: {
-                primaryColor: '#333333',
-                secondaryColor: '#333333',
-                size: 'sm'
-            }
-        });
-
-        marker.addTo(map);
-    };
-
-    function onClick(e) {
-        alert("this works");
-    }
-    function LoadSnowProviders() {
-        $.post('/Customers/GetSnowProviders', function (providers) {
-            console.log(providers);
-            addMarkersToMap(providers);
-        });
-    }
-
-    function addMarkersToMap(providers) {
-        var RequestUrl = 'www.mapquestapi.com/geocoding/v1/batch?&inFormat=kvp&outFormat=json&thumbMaps=false&maxResults=1&location=';
-        for (var i = 0; i < providers.length; i++) {
-            if (i == 0) {
-                RequestUrl += providers[i].Description;
-            }
-            else {
-                RequestUrl += '&location=' + providers[i].Description;
-            }
-            console.log(providers[i].Description)
-        }
-        RequestUrl += '&key=b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6'
-        console.log(RequestUrl);
-        var OurRequest = new XMLHttpRequest()
-        OurRequest.open('Get', 'http://' + RequestUrl)
-        OurRequest.onload = function () {
-            var custdata = JSON.parse(OurRequest.responseText);
-            console.log(custdata)
-            CreateCustMarker(custdata, providers);
-        };
-        OurRequest.send();
-
-    };
-
-
-    function CreateCustMarker(custdata, providers) {
-        for (var i = 0; i < providers.length; i++) {
-
-
-            var marker = L.mapquest.textMarker([custdata.results[i].locations[0].displayLatLng.lat, custdata.results[i].locations[0].displayLatLng.lng], {
-                        text: providers[i].ProviderName,
-                        position: 'right',
-                        type: 'marker',
-                        icon: {
-                            primaryColor: '#3582ff',
-                            secondaryColor: '#ff3535',
-                            size: 'sm'
-                        }
-                    });
-            marker.addTo(map).on('mouseover', onClick);
-         };
-    }*@
 
     <script>
     var map;
@@ -140,7 +52,7 @@
         // 'map' refers to a <div> element with the ID map
         map = L.mapquest.map('map', {
             center: [results.results[0].locations[0].displayLatLng.lat, results.results[0].locations[0].displayLatLng.lng],
-            layers: L.mapquest.tileLayer('map'),
+            layers: [L.mapquest.tileLayer("map"), fg],
             zoom: 15
         });
         map.addControl(L.mapquest.control());
@@ -156,10 +68,6 @@
         });
         marker.addTo(map);
     };
-        function onClick(p) {
-            alert(p.ProviderName + ' has ' + p.ProviderPhone + ' stars');
-            
-        }
 
         var providers;
     function LoadSnowProviders() {
@@ -190,18 +98,20 @@
             CreateCustMarker(custdata, providers);
         };
         OurRequest.send();
-    };
+        };
+        var icon;
+        var fg = L.featureGroup();
     function CreateCustMarker(custdata, providers) {
         for (var i = 0; i < providers.length; i++) {
 
-                    var marker = L.mapquest.textMarker([custdata.results[i].locations[0].displayLatLng.lat, custdata.results[i].locations[0].displayLatLng.lng], {
+                     icon = L.mapquest.textMarker([custdata.results[i].locations[0].displayLatLng.lat, custdata.results[i].locations[0].displayLatLng.lng], {
                         text: providers[i].ProviderName,
                         position: 'right',
                         type: 'marker',
                         icon: {
                             primaryColor: '#3582ff',
                             secondaryColor: '#ff3535',
-                            size: 'sm'c
+                            size: 'sm'
                         }
             });
 
@@ -216,10 +126,21 @@
             var link = '<a href="/Providers/Details/1" target="_blank" style="font-size:20px">name</a>';
             link = link.replace('name', text);
             link = link.replace('1', pid);
-            marker.addTo(map);
-            marker.bindPopup(link + '<br/>' + rating).addTo(map);
-                
+            icon.addTo(fg);
+            icon.bindPopup(link + '<br/>' + rating).addTo(fg);
+           
         } 
     }
+
+        function ClearMap() {
+            var layers = fg.getLayers();
+
+            for (var i = 0; i < layers.length; i++) {
+
+                fg.removeLayer(layers[i]);
+            }
+        }
     
+        
 </script>
+ 
