@@ -48,12 +48,12 @@ namespace ProviderAppver3.Controllers
             string city = location.City;
             string state = location.State;
             var address = num + " " + street + ", " + city + ", " + state;
-            var locationService = new GoogleLocationService();
-            var point = locationService.GetLatLongFromAddress(address);
-            var latitude = point.Latitude;
-            var longitude = point.Longitude;
-            ViewBag.Latitude = latitude;
-            ViewBag.Longitude = longitude;      
+            //var locationService = new GoogleLocationService();
+            //var point = locationService.GetLatLongFromAddress(address);
+            //var latitude = point.Latitude;
+            //var longitude = point.Longitude;
+            //ViewBag.Latitude = latitude;
+            //ViewBag.Longitude = longitude;      
             ViewBag.Address = address;
             ViewBag.Name = name;
             return View(customer);
