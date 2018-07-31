@@ -24,6 +24,7 @@
         <AssociationConnector Association="ProviderDBV2Model.FK_ImagesTwo_Providers" />
         <EntityTypeShape EntityType="ProviderDBV2Model.ArticlesComment" Width="1.5" PointX="7.5" PointY="14.5" />
         <AssociationConnector Association="ProviderDBV2Model.FK_ArticlesComments_Providers" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

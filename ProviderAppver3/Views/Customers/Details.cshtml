@@ -12,22 +12,28 @@
     </div>
 </div>
 <hr />
-<div class="row" >
-    <div class="col-3 serviceBttn">
-        <button class="button button2" onfocus="ClearMap()" onclick="LoadSnowProviders()">Snow Plow Service</button>
+<div class="row">
+    <div class="col-5">
+        <div class="search-container">           
+                <input type="text" id="textbox" onfocus="ClearMap()" placeholder="Search For Services">
+                <input type="button" onclick="LoadProviders((document.getElementById('textbox').value))" value="Submit" />          
+        </div>
     </div>
-    <div class="col-3 serviceBttn">
-        <button class="button button2" onfocus="ClearMap()" onclick="LoadLawnProviders()">Lawn Service</button>
-    </div>
-    <div class="col-3 serviceBttn">
-        <button class="button button2" onfocus="ClearMap()" onclick="LoadAutoProviders()">Auto Service</button>
-    </div>
-    <div class="col-3 serviceBttn">
-        <button class="button button2" onfocus="ClearMap()" onclick="LoadTowProviders()">Towing Service</button>
-    </div>
+    @*<div class="col-3 serviceBttn">
+            <button class="button button2" onfocus="ClearMap()" onclick="LoadSnowProviders()">Snow Plow Service</button>
+        </div>
+        <div class="col-3 serviceBttn">
+            <button class="button button2" onfocus="ClearMap()" onclick="LoadLawnProviders()">Lawn Service</button>
+        </div>
+        <div class="col-3 serviceBttn">
+            <button class="button button2" onfocus="ClearMap()" onclick="LoadAutoProviders()">Auto Service</button>
+        </div>
+        <div class="col-3 serviceBttn">
+            <button class="button button2" onfocus="ClearMap()" onclick="LoadTowProviders()">Towing Service</button>
+        </div>*@
 </div>
-<div class="row">      
-    <div class="col" id='map'></div>    
+<div class="row">
+    <div class="col" id='map'></div>
 </div>
 
 <p>
@@ -36,7 +42,7 @@
 </p>
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 
-    <script>
+<script>
     var map;
         var OurRequest = new XMLHttpRequest()
         OurRequest.open('Get', 'http://www.mapquestapi.com/geocoding/v1/address?key=b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6&location=' + '@ViewBag.Address')
@@ -70,8 +76,8 @@
     };
 
         var providers;
-    function LoadSnowProviders() {
-        $.post('/Customers/GetSnowProviders', function (providers) {
+    function LoadProviders(text) {
+        $.post('/Customers/GetSnowProviders', { text: text }, function (providers) {
             console.log(providers);
             providers = providers;
             addMarkersToMap(providers);
@@ -128,8 +134,8 @@
             link = link.replace('1', pid);
             icon.addTo(fg);
             icon.bindPopup(link + '<br/>' + rating).addTo(fg);
-           
-        } 
+
+        }
     }
 
         function ClearMap() {
@@ -140,7 +146,6 @@
                 fg.removeLayer(layers[i]);
             }
         }
-    
-        
+
+
 </script>
- 

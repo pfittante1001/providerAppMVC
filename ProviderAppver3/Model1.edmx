@@ -5,6 +5,16 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ProviderDBV2Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
         <EntityType Name="Addresses">
           <Key>
             <PropertyRef Name="AddressID" />
@@ -114,6 +124,7 @@
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
           <Property Name="Active" Type="bit" />
           <Property Name="IsSnow" Type="bit" />
+          <Property Name="Services" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <Association Name="FK_Addresses_Customers">
           <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
@@ -256,6 +267,7 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="ProviderDBV2ModelStoreContainer">
+          <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Addresses" EntityType="Self.Addresses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ArticlesComments" EntityType="Self.ArticlesComments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
@@ -413,6 +425,7 @@
           <Property Name="Active" Type="Boolean" />
           <NavigationProperty Name="ArticlesComments" Relationship="ProviderDBV2Model.FK_ArticlesComments_Providers" FromRole="Provider" ToRole="ArticlesComment" />
           <Property Name="IsSnow" Type="Boolean" />
+          <Property Name="Services" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           </EntityType>
         <Association Name="FK_Addresses_Customers">
           <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
@@ -544,6 +557,7 @@
             <End Role="Provider" EntitySet="Providers" />
             <End Role="ArticlesComment" EntitySet="ArticlesComments" />
           </AssociationSet>
+          <EntitySet Name="C__MigrationHistory" EntityType="ProviderDBV2Model.C__MigrationHistory" />
           </EntityContainer>
         <EntityType Name="ImagesTwo">
           <Key>
@@ -604,6 +618,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="C__MigrationHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+            <PropertyRef Name="ContextKey" />
+          </Key>
+          <Property Name="MigrationId" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -685,6 +709,7 @@
           <EntitySetMapping Name="Providers">
             <EntityTypeMapping TypeName="ProviderDBV2Model.Provider">
               <MappingFragment StoreEntitySet="Providers">
+                <ScalarProperty Name="Services" ColumnName="Services" />
                 <ScalarProperty Name="IsSnow" ColumnName="IsSnow" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -724,6 +749,16 @@
                 <ScalarProperty Name="ThisDateTime" ColumnName="ThisDateTime" />
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
                 <ScalarProperty Name="CommentID" ColumnName="CommentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C__MigrationHistory">
+            <EntityTypeMapping TypeName="ProviderDBV2Model.C__MigrationHistory">
+              <MappingFragment StoreEntitySet="__MigrationHistory">
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
