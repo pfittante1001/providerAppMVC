@@ -153,6 +153,38 @@ namespace ProviderAppver3.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public JsonResult GetSnowProvRankings()
+        {
+            var getRankings = (from p in db.Providers
+                               where p.IsSnow == true &&
+                               p.Active == true
+                               select p.ProviderID).ToArray();
+            Object[] result = new Object[getRankings.Length];
+            Dictionary<string, double?> Rating = new Dictionary<string, double?>();
+            //int j = 0;
+            foreach (int provider in getRankings)
+            {
+                string providername = (from p in db.Providers
+                                       where p.ProviderID == provider
+                                       select p.ProviderName).First().ToString();
+                double? numRate = (from r in db.ArticlesComments
+                               where r.ProviderID == provider
+                               select r.Rating).Average();
+                
+
+                Rating.Add(providername, numRate);
+
+
+            }
+            var providerName = from x in Rating where x.Value == Rating.Max(v => v.Value) select x.Key;
+            var maxRating = from x in Rating where x.Value == Rating.Max(v => v.Value) select x.Value;
+
+            var providers = new { providerName, maxRating };
+        
+            return Json(providers, JsonRequestBehavior.AllowGet);
+
+        }
         public JsonResult GetSnowProviders()
         {
             var snowproviders = (from p in db.Providers

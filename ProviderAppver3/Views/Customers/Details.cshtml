@@ -3,21 +3,24 @@
     ViewBag.Title = "Details";
 }
 
+@ViewBag.maxRating
 <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
 <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
 
 <div class="row">
     <div class="col">
         <h4 style="display:inline-block">Welcome @ViewBag.Name</h4>
+        <h4 style="display:inline-block"id="providerName"></h4>
+        <h4 style="display:inline-block"id="providerRating"></h4>
     </div>
 </div>
 <hr />
-<div class="row" >
+<div class="row">
     <div class="col-3 serviceBttn">
         <button class="button button2" id="snow" onclick="LoadSnowProviders()">Snow Plow Service</button>
     </div>
     <div class="col-3 serviceBttn">
-        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Lawn Service</button>
+        <button class="button button2" id="snow" onclick="GetSnowProvRanking()">Lawn Service</button>
     </div>
     <div class="col-3 serviceBttn">
         <button class="button button2" id="snow" onclick="LoadSnowProviders()">Auto Service</button>
@@ -26,8 +29,8 @@
         <button class="button button2" id="snow" onclick="LoadSnowProviders()">Towing Service</button>
     </div>
 </div>
-<div class="row">      
-    <div class="col" id='map'></div>    
+<div class="row">
+    <div class="col" id='map'></div>
 </div>
 
 <p>
@@ -71,10 +74,19 @@
 
         function onClick(p) {
             alert(p.ProviderName + ' has ' + p.ProviderPhone + ' stars');
-            
+
         }
 
         var providers;
+
+        function GetSnowProvRanking() {
+            $.post('/Customers/GetSnowProvRankings', function (providers) {
+                console.log(providers);
+                 document.getElementById('providerName').innerHTML= providers.providerName
+                 document.getElementById('providerRating').innerHTML = providers.maxRating
+
+            });
+        }
 
     function LoadSnowProviders() {
         $.post('/Customers/GetSnowProviders', function (providers) {
@@ -133,9 +145,9 @@
             link = link.replace('1', pid);
             marker.addTo(map);
             marker.bindPopup(link + '<br/>' + rating).addTo(map);
-                
-        } 
+
+        }
     }
-    
+
 
 </script>
