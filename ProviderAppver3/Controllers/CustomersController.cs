@@ -154,6 +154,7 @@ namespace ProviderAppver3.Controllers
             base.Dispose(disposing);
         }
 
+
         public JsonResult GetSnowProvRankings()
         {
             var getRankings = (from p in db.Providers
@@ -185,10 +186,11 @@ namespace ProviderAppver3.Controllers
             return Json(providers, JsonRequestBehavior.AllowGet);
 
         }
-        public JsonResult GetSnowProviders()
+       
+        public JsonResult GetSnowProviders(string text)
         {
             var snowproviders = (from p in db.Providers
-                                 where p.IsSnow == true &&
+                                 where p.Services.Contains(text) &&
                                  p.Active == true
                                  select p.ProviderID).ToArray();
             Object[] result = new Object[snowproviders.Length];

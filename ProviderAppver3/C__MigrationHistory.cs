@@ -15,24 +15,16 @@ namespace ProviderAppver3
 using System;
     using System.Collections.Generic;
     
-public partial class ImagesTwo
+public partial class C__MigrationHistory
 {
 
-    public int ImageID { get; set; }
+    public string MigrationId { get; set; }
 
-    public byte[] ImageBin { get; set; }
+    public string ContextKey { get; set; }
 
-    public byte[] ImageIMG { get; set; }
+    public byte[] Model { get; set; }
 
-    public Nullable<int> CustomerID { get; set; }
-
-    public Nullable<int> ProviderID { get; set; }
-
-
-
-    public virtual Customer Customer { get; set; }
-
-    public virtual Provider Provider { get; set; }
+    public string ProductVersion { get; set; }
 
 }
 

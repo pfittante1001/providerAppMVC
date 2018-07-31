@@ -16,17 +16,11 @@
 </div>
 <hr />
 <div class="row">
-    <div class="col-3 serviceBttn">
-        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Snow Plow Service</button>
-    </div>
-    <div class="col-3 serviceBttn">
-        <button class="button button2" id="snow" onclick="GetSnowProvRanking()">Lawn Service</button>
-    </div>
-    <div class="col-3 serviceBttn">
-        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Auto Service</button>
-    </div>
-    <div class="col-3 serviceBttn">
-        <button class="button button2" id="snow" onclick="LoadSnowProviders()">Towing Service</button>
+    <div class="col-5">
+        <div class="search-container">           
+                <input type="text" id="textbox" onfocus="ClearMap()" placeholder="Search For Services">
+                <input type="button" onclick="LoadProviders((document.getElementById('textbox').value))" value="Submit" />          
+        </div>
     </div>
 </div>
 <div class="row">
@@ -55,7 +49,9 @@
         // 'map' refers to a <div> element with the ID map
         map = L.mapquest.map('map', {
             center: [results.results[0].locations[0].displayLatLng.lat, results.results[0].locations[0].displayLatLng.lng],
-            layers: L.mapquest.tileLayer('map'),
+
+            layers: [L.mapquest.tileLayer("map"), fg],
+
             zoom: 15
         });
         map.addControl(L.mapquest.control());
@@ -72,12 +68,6 @@
         marker.addTo(map);
     };
 
-        function onClick(p) {
-            alert(p.ProviderName + ' has ' + p.ProviderPhone + ' stars');
-
-        }
-
-        var providers;
 
         function GetSnowProvRanking() {
             $.post('/Customers/GetSnowProvRankings', function (providers) {
@@ -88,8 +78,11 @@
             });
         }
 
-    function LoadSnowProviders() {
-        $.post('/Customers/GetSnowProviders', function (providers) {
+
+        var providers;
+    function LoadProviders(text) {
+        $.post('/Customers/GetSnowProviders', { text: text }, function (providers) {
+
             console.log(providers);
             providers = providers;
             addMarkersToMap(providers);
@@ -116,11 +109,13 @@
             CreateCustMarker(custdata, providers);
         };
         OurRequest.send();
-    };
+        };
+        var icon;
+        var fg = L.featureGroup();
     function CreateCustMarker(custdata, providers) {
         for (var i = 0; i < providers.length; i++) {
 
-                    var marker = L.mapquest.textMarker([custdata.results[i].locations[0].displayLatLng.lat, custdata.results[i].locations[0].displayLatLng.lng], {
+                     icon = L.mapquest.textMarker([custdata.results[i].locations[0].displayLatLng.lat, custdata.results[i].locations[0].displayLatLng.lng], {
                         text: providers[i].ProviderName,
                         position: 'right',
                         type: 'marker',
@@ -143,11 +138,20 @@
             var link = '<a href="/Providers/Details/1" target="_blank" style="font-size:20px">name</a>';
             link = link.replace('name', text);
             link = link.replace('1', pid);
-            marker.addTo(map);
-            marker.bindPopup(link + '<br/>' + rating).addTo(map);
+
+            icon.addTo(fg);
+            icon.bindPopup(link + '<br/>' + rating).addTo(fg);
 
         }
     }
 
+        function ClearMap() {
+            var layers = fg.getLayers();
+
+            for (var i = 0; i < layers.length; i++) {
+
+                fg.removeLayer(layers[i]);
+            }
+        }
 
 </script>
