@@ -3,6 +3,36 @@
     ViewBag.Title = "Details";
 }
 
+<<<<<<< HEAD
+<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
+
+<div class="row">
+    <div class="col">
+        <h4 style="display:inline-block">Welcome @ViewBag.Name</h4>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-5">
+        <div class="search-container">           
+                <input type="text" id="textbox" onfocus="ClearMap()"  placeholder="Search For Services">
+                <input type="button" onclick="LoadProviders((document.getElementById('textbox').value))" value="Submit" />          
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col" id='map'></div>
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+<script>
+=======
 
     @ViewBag.maxRating
     <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
@@ -61,6 +91,7 @@
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 
     <script>
+
     var map;
         var OurRequest = new XMLHttpRequest()
         OurRequest.open('Get', 'http://www.mapquestapi.com/geocoding/v1/address?key=b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6&location=' + '@ViewBag.Address')
@@ -68,17 +99,18 @@
         var ourdata = JSON.parse(OurRequest.responseText);
         console.log(ourdata)
         LoadMap(ourdata)
-        };
-        OurRequest.send();
+    };
+    OurRequest.send();
+
+
 
     function LoadMap(results) {
         L.mapquest.key = 'b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6';
         // 'map' refers to a <div> element with the ID map
+        var baseLayer = L.mapquest.tileLayer('map');
         map = L.mapquest.map('map', {
             center: [results.results[0].locations[0].displayLatLng.lat, results.results[0].locations[0].displayLatLng.lng],
-
-            layers: [L.mapquest.tileLayer("map"), fg],
-
+            layers: [baseLayer, fg],
             zoom: 15
         });
         map.addControl(L.mapquest.control());
@@ -93,6 +125,14 @@
             }
         });
         marker.addTo(map);
+
+        L.control.layers({
+            'Map': baseLayer,
+            'Hybrid': L.mapquest.tileLayer('hybrid'),
+            'Satellite': L.mapquest.tileLayer('satellite'),
+            'Light': L.mapquest.tileLayer('light'),
+            'Dark': L.mapquest.tileLayer('dark')
+        }).addTo(map);
     };
 
     //pete get top ranking of snow providers script
