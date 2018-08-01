@@ -75,11 +75,11 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.IsSnow, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Services, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             <div class="checkbox">
-                @Html.EditorFor(model => model.IsSnow)
-                @Html.ValidationMessageFor(model => model.IsSnow, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Services)
+                @Html.ValidationMessageFor(model => model.Services, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>

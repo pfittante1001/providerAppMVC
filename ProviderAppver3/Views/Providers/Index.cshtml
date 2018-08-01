@@ -21,17 +21,19 @@
             @Html.DisplayNameFor(model => model.ProviderEmail)
         </th>
         @*<th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>*@
+            @Html.DisplayNameFor(model => model.Title)
+        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Active)
+        <th>
+            @Html.DisplayNameFor(model => model.Services)
         </th>
-        @*<th>
-                @Html.DisplayNameFor(model => model.AspNetUser.Email)
-            </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.AspNetUser.Email)
+        </th>
         <th></th>
     </tr>
 
@@ -55,6 +57,9 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Active)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Services)
         </td>
         @*<td>
             @Html.DisplayFor(modelItem => item.AspNetUser.Email)
