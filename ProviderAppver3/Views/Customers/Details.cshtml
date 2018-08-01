@@ -3,37 +3,63 @@
     ViewBag.Title = "Details";
 }
 
-@ViewBag.maxRating
-<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
-<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
 
-<div class="row">
-    <div class="col">
-        <h4 style="display:inline-block">Welcome @ViewBag.Name</h4>
-        <h4 style="display:inline-block"id="providerName"></h4>
-        <h4 style="display:inline-block"id="providerRating"></h4>
-    </div>
-</div>
-<hr />
-<div class="row">
-    <div class="col-5">
-        <div class="search-container">           
-                <input type="text" id="textbox" onfocus="ClearMap()" placeholder="Search For Services">
-                <input type="button" onclick="LoadProviders((document.getElementById('textbox').value))" value="Submit" />          
+    @ViewBag.maxRating
+    <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
+    <body onload="GetSnowProvRanking()">
+        @*modal code begin*@
+        <div id="overlay">
+            <div>
+                <h2>Average Highest Customer Rating</h2>
+                <h3 style="display:inline-block" id="providerName"></h3>
+                <span class="starFadeN" id="sRate1"></span><span class="starFadeN" id="sRate2"></span><span class="starFadeN" id="sRate3"></span><span class="starFadeN" id="sRate4"></span><span class="starFadeN" id="sRate5"></span>
+                <br>
+                <h2>Lowest Average Price</h2>
+                <h3 style="display:inline-block" id="providerName1"></h3>
+                <br>
+                <h2>Average Response Time</h2>
+                <h3 style="display:inline-block" id="providerName2"></h3>
+                <br>
+                
+                <a href='#' onclick='overlay()'>Click here to close</a>
+
+            </div>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col" id='map'></div>
-</div>
+        @*modal code end*@
 
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
-<script src="~/Scripts/jquery-3.3.1.min.js"></script>
 
-<script>
+        <div class="row">
+            <div class="col">
+                <h4>Welcome @ViewBag.Name</h4>
+                <button href='#' onclick='overlay()'>Top rated active providers</button>
+
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-5">
+                <div class="search-container">
+                    <input type="text" id="textbox" onfocus="ClearMap()" placeholder="Search For Services">
+                    <input type="button" onclick="LoadProviders((document.getElementById('textbox').value))" value="Submit" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" id='map'></div>
+        </div>
+
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+
+        <!-- popup -->
+
+    </body>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+
+    <script>
     var map;
         var OurRequest = new XMLHttpRequest()
         OurRequest.open('Get', 'http://www.mapquestapi.com/geocoding/v1/address?key=b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6&location=' + '@ViewBag.Address')
@@ -68,13 +94,16 @@
         marker.addTo(map);
     };
 
-
+    //pete get top ranking of snow providers script
         function GetSnowProvRanking() {
             $.post('/Customers/GetSnowProvRankings', function (providers) {
                 console.log(providers);
-                 document.getElementById('providerName').innerHTML= providers.providerName
-                 document.getElementById('providerRating').innerHTML = providers.maxRating
-
+                document.getElementById('providerName').innerHTML = providers.providerName
+                document.getElementById('providerName1').innerHTML = providers.providerName
+                document.getElementById('providerName2').innerHTML = providers.providerName
+                 for (var i = 1; i <= providers.maxRating; i++) {
+                     $("#sRate" + i).attr('class', 'starGlowN');
+                 }
             });
         }
 
@@ -153,5 +182,20 @@
                 fg.removeLayer(layers[i]);
             }
         }
+ //pete modal script
+        function overlay() {
+            el = document.getElementById("overlay");
+            el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        }
 
-</script>
+        function SCRate() {
+            var totalRating = document.getElementById('providerRating').innerHTML.value;
+
+        for (var i = 1; i <= totalRating; i++) {
+            $("#sRate" + i).attr('class', 'starGlowN');
+        }
+    }
+    $(function(){
+        SCRate();
+    });
+    </script>
