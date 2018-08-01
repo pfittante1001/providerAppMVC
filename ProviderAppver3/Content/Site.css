@@ -131,7 +131,7 @@ li#login{
     height: 100%;
     text-align: center;
     z-index: 1000;
-    background-image: url('../Images/background.png');
+    /*background-image: url('../Images/background.png');*/
 }
     #overlay div {
         width: 800px;
