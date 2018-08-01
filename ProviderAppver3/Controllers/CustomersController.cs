@@ -154,11 +154,12 @@ namespace ProviderAppver3.Controllers
             base.Dispose(disposing);
         }
 
-
-        public JsonResult GetProvRankings()
+        
+        public JsonResult GetProvRankings(string text)
         {
             var getRankings = (from p in db.Providers
-                               where p.Active == true
+                               where p.Active == true &&
+                               p.Services.Contains(text)
                                select p.ProviderID).ToArray();
             Object[] result = new Object[getRankings.Length];
             Dictionary<string, double?> Rating = new Dictionary<string, double?>();
@@ -177,14 +178,11 @@ namespace ProviderAppver3.Controllers
 
 
             }
-            
+
+
             var providerName = from x in Rating where x.Value == Rating.Max(v => v.Value) select x.Key;
             var maxRating = from x in Rating where x.Value == Rating.Max(v => v.Value) select x.Value;
-
-            int providerID = (from p in db.Providers
-                              where p.ProviderName.Equals(providerName)
-                              select p.ProviderID).First();
-            var providers = new { providerName, providerID, maxRating };
+            var providers = new { providerName, maxRating };
         
             return Json(providers, JsonRequestBehavior.AllowGet);
 

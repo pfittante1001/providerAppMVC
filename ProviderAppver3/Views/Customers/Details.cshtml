@@ -7,7 +7,7 @@
     @ViewBag.maxRating
     <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
     <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
-    <body onload="GetSnowProvRanking()">
+    <body>
         @*modal code begin*@
         <div id="overlay">
             <div>
@@ -29,13 +29,14 @@
         @*modal code end*@
 
 
-        <div class="row">
+        <div class="row" id="ratingDiv" style="display:none">
             <div class="col">
                 <h4>Welcome @ViewBag.Name</h4>
-                <button href='#' onclick='overlay()'>Top rated active providers</button>
+                <button href='#' onclick="overlay((document.getElementById('textbox').value)), GetProvRankings(document.getElementById('textbox').value) " >Top rated active providers</button>
 
             </div>
         </div>
+
         <hr />
         <div class="row">
             <div class="col-5">
@@ -95,13 +96,13 @@
     };
 
     //pete get top ranking of snow providers script
-        function GetSnowProvRanking() {
-            $.post('/Customers/GetSnowProvRankings', function (providers) {
+        function GetProvRankings(text) {
+            $.post('/Customers/GetProvRankings', { text: text }, function (providers) {
                 console.log(providers);
                 document.getElementById('providerName').innerHTML = providers.providerName
                 document.getElementById('providerName1').innerHTML = providers.providerName
                 document.getElementById('providerName2').innerHTML = providers.providerName
-                 for (var i = 1; i <= providers.maxRating; i++) {
+                for (var i = 1; i <= providers.maxRating; i++) {
                      $("#sRate" + i).attr('class', 'starGlowN');
                  }
             });
@@ -115,6 +116,7 @@
             console.log(providers);
             providers = providers;
             addMarkersToMap(providers);
+            document.getElementById('ratingDiv').style.display = "block";
         });
     }
     function addMarkersToMap(providers) {
