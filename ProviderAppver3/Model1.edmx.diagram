@@ -25,6 +25,10 @@
         <EntityTypeShape EntityType="ProviderDBV2Model.ArticlesComment" Width="1.5" PointX="7.5" PointY="14.5" />
         <AssociationConnector Association="ProviderDBV2Model.FK_ArticlesComments_Providers" />
         <EntityTypeShape EntityType="ProviderDBV2Model.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.Chat" Width="1.5" PointX="10.875" PointY="13.875" />
+        <EntityTypeShape EntityType="ProviderDBV2Model.sysdiagram" Width="1.5" PointX="0.75" PointY="3.75" />
+        <AssociationConnector Association="ProviderDBV2Model.FK_Chats_Customers" />
+        <AssociationConnector Association="ProviderDBV2Model.FK_Chats_Providers" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -19,7 +20,7 @@ namespace ProviderAppver3
         [DisplayName("Phone")]
         public string CustomerPhone { get; set; }
         [DisplayName("Email")]
-        public string CustomerEmail { get; set; }
-        public string UserName { get; set; }
+        public string CustomerEmail { get; set; }       
+        
     }
 }

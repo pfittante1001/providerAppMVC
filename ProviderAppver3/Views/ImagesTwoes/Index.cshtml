@@ -17,12 +17,12 @@
         @*<th>
             @Html.DisplayNameFor(model => model.ImageIMG)
         </th>*@
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.Customer.CustomerName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Provider.ProviderName)
-        </th>
+        </th>*@
         <th></th>
     </tr>
 
@@ -38,12 +38,12 @@
                }
             
         </td>
-        <td>
+        @*<td>
             @Html.DisplayFor(modelItem => item.Customer.CustomerName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Provider.ProviderName)
-        </td>
+        </td>*@
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ImageID }) |
             @Html.ActionLink("Details", "Details", new { id=item.ImageID }) |

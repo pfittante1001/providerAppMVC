@@ -90,6 +90,17 @@
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="IsProvider" Type="bit" />
         </EntityType>
+        <EntityType Name="Chats">
+          <Key>
+            <PropertyRef Name="ChatID" />
+          </Key>
+          <Property Name="ChatID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="nvarchar" MaxLength="1000" />
+          <Property Name="ChatDate" Type="datetime" />
+          <Property Name="IsRead" Type="bit" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="ProviderID" Type="int" />
+        </EntityType>
         <EntityType Name="Customers">
           <Key>
             <PropertyRef Name="CustomerID" />
@@ -126,6 +137,16 @@
           <Property Name="IsSnow" Type="bit" />
           <Property Name="Services" Type="nvarchar" MaxLength="200" />
         </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
         <Association Name="FK_Addresses_Customers">
           <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
           <End Role="Addresses" Type="Self.Addresses" Multiplicity="*" />
@@ -158,6 +179,30 @@
               <PropertyRef Name="ProviderID" />
             </Principal>
             <Dependent Role="ArticlesComments">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Chats_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Chats" Type="Self.Chats" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Chats">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Chats_Providers">
+          <End Role="Providers" Type="Self.Providers" Multiplicity="0..1" />
+          <End Role="Chats" Type="Self.Chats" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Providers">
+              <PropertyRef Name="ProviderID" />
+            </Principal>
+            <Dependent Role="Chats">
               <PropertyRef Name="ProviderID" />
             </Dependent>
           </ReferentialConstraint>
@@ -275,9 +320,11 @@
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Chats" EntityType="Self.Chats" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ImagesTwo" EntityType="Self.ImagesTwo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Providers" EntityType="Self.Providers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Addresses_Customers" Association="Self.FK_Addresses_Customers">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="Addresses" EntitySet="Addresses" />
@@ -289,6 +336,14 @@
           <AssociationSet Name="FK_ArticlesComments_Providers" Association="Self.FK_ArticlesComments_Providers">
             <End Role="Providers" EntitySet="Providers" />
             <End Role="ArticlesComments" EntitySet="ArticlesComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Chats_Customers" Association="Self.FK_Chats_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Chats" EntitySet="Chats" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Chats_Providers" Association="Self.FK_Chats_Providers">
+            <End Role="Providers" EntitySet="Providers" />
+            <End Role="Chats" EntitySet="Chats" />
           </AssociationSet>
           <AssociationSet Name="FK_Customers_AspNetUsers" Association="Self.FK_Customers_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -407,6 +462,7 @@
           <NavigationProperty Name="AspNetUser" Relationship="Self.FK_Customers_AspNetUsers" FromRole="Customers" ToRole="AspNetUsers" />
           <NavigationProperty Name="ImagesTwoes" Relationship="ProviderDBV2Model.FK_ImagesTwo_Customers" FromRole="Customer" ToRole="ImagesTwo" />
           <Property Name="IsSnow" Type="Int32" />
+          <NavigationProperty Name="Chats" Relationship="ProviderDBV2Model.FK_Chats_Customers" FromRole="Customer" ToRole="Chat" />
         </EntityType>
         <EntityType Name="Provider">
           <Key>
@@ -426,6 +482,7 @@
           <NavigationProperty Name="ArticlesComments" Relationship="ProviderDBV2Model.FK_ArticlesComments_Providers" FromRole="Provider" ToRole="ArticlesComment" />
           <Property Name="IsSnow" Type="Boolean" />
           <Property Name="Services" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Chats" Relationship="ProviderDBV2Model.FK_Chats_Providers" FromRole="Provider" ToRole="Chat" />
           </EntityType>
         <Association Name="FK_Addresses_Customers">
           <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
@@ -558,6 +615,16 @@
             <End Role="ArticlesComment" EntitySet="ArticlesComments" />
           </AssociationSet>
           <EntitySet Name="C__MigrationHistory" EntityType="ProviderDBV2Model.C__MigrationHistory" />
+          <EntitySet Name="Chats" EntityType="ProviderDBV2Model.Chat" />
+          <EntitySet Name="sysdiagrams" EntityType="ProviderDBV2Model.sysdiagram" />
+          <AssociationSet Name="FK_Chats_Customers" Association="ProviderDBV2Model.FK_Chats_Customers">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Chat" EntitySet="Chats" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Chats_Providers" Association="ProviderDBV2Model.FK_Chats_Providers">
+            <End Role="Provider" EntitySet="Providers" />
+            <End Role="Chat" EntitySet="Chats" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="ImagesTwo">
           <Key>
@@ -628,6 +695,53 @@
           <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
           <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="Chat">
+          <Key>
+            <PropertyRef Name="ChatID" />
+          </Key>
+          <Property Name="ChatID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="ChatDate" Type="DateTime" Precision="3" />
+          <Property Name="IsRead" Type="Boolean" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="ProviderID" Type="Int32" />
+          <NavigationProperty Name="Customer" Relationship="ProviderDBV2Model.FK_Chats_Customers" FromRole="Chat" ToRole="Customer" />
+          <NavigationProperty Name="Provider" Relationship="ProviderDBV2Model.FK_Chats_Providers" FromRole="Chat" ToRole="Provider" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Chats_Customers">
+          <End Type="ProviderDBV2Model.Customer" Role="Customer" Multiplicity="0..1" />
+          <End Type="ProviderDBV2Model.Chat" Role="Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Chats_Providers">
+          <End Type="ProviderDBV2Model.Provider" Role="Provider" Multiplicity="0..1" />
+          <End Type="ProviderDBV2Model.Chat" Role="Chat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Provider">
+              <PropertyRef Name="ProviderID" />
+            </Principal>
+            <Dependent Role="Chat">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -759,6 +873,29 @@
                 <ScalarProperty Name="Model" ColumnName="Model" />
                 <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
                 <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Chats">
+            <EntityTypeMapping TypeName="ProviderDBV2Model.Chat">
+              <MappingFragment StoreEntitySet="Chats">
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+                <ScalarProperty Name="ChatDate" ColumnName="ChatDate" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="ChatID" ColumnName="ChatID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="ProviderDBV2Model.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

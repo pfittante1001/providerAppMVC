@@ -4,24 +4,40 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using GoogleMaps.LocationServices;
 using Microsoft.AspNet.Identity;
-using ProviderAppver3;
 
 namespace ProviderAppver3.Controllers
 {
+    public class Location
+    {
+        public double ProLat { get; set; }
+        public double ProLng { get; set; }
+        public double CustLat { get; set; }
+        public double CustLng { get; set; }
+        public char Unit { get; set; }
+        public int ProID { get; set; }
+        public int Counter { get; set; }
+
+    }
     public class CustomersController : Controller
     {
         private ProviderDBV2Entities db = new ProviderDBV2Entities();
+        public double ProLat { get; set; }
+        public double ProLng { get; set; }
+        public double CustLat { get; set; }
+        public double CustLng { get; set; }
+        public char Unit { get; set; }
+        public int ProID { get; set; }
+        public int Counter { get; set; }
+        public List<Location> MapData { get; set; }
 
         // GET: Customers
         [Authorize]
         public ActionResult Index()
         {
             var customers = db.Customers.Include(c => c.AspNetUser);
-            
+
             return View(customers.ToList());
         }
 
@@ -154,7 +170,7 @@ namespace ProviderAppver3.Controllers
             base.Dispose(disposing);
         }
 
-        
+
         public JsonResult GetProvRankings(string text)
         {
             var getRankings = (from p in db.Providers
@@ -170,9 +186,9 @@ namespace ProviderAppver3.Controllers
                                        where p.ProviderID == provider
                                        select p.ProviderName).First().ToString();
                 double? numRate = (from r in db.ArticlesComments
-                               where r.ProviderID == provider
-                               select r.Rating).Average();
-                
+                                   where r.ProviderID == provider
+                                   select r.Rating).Average();
+
 
                 Rating.Add(providername, numRate);
 
@@ -183,11 +199,11 @@ namespace ProviderAppver3.Controllers
             var providerName = from x in Rating where x.Value == Rating.Max(v => v.Value) select x.Key;
             var maxRating = from x in Rating where x.Value == Rating.Max(v => v.Value) select x.Value;
             var providers = new { providerName, maxRating };
-        
+
             return Json(providers, JsonRequestBehavior.AllowGet);
 
         }
-       
+
         public JsonResult GetSnowProviders(string text)
         {
             var snowproviders = (from p in db.Providers
@@ -218,10 +234,11 @@ namespace ProviderAppver3.Controllers
                                where r.ProviderID == provider
                                select r.Rating).Average().ToString();
                 street = street.Replace(" ", "%20");
-                
+
                 var address = num + "%20" + street + "%20" + city + "%20" + state;
 
-                Provider snowprovider = new Provider() { 
+                Provider snowprovider = new Provider()
+                {
                     ProviderName = providername,
                     Description = address,
                     ProviderID = provider,
@@ -231,11 +248,42 @@ namespace ProviderAppver3.Controllers
                 result[i] = snowprovider;
                 i++;
             }
-
-
-
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        int ctr = 0;
+        Dictionary<int, double> MaxD = new Dictionary<int, double>();
+        public JsonResult GetDist(List<Location> MapData, ProviderAppver3.Models.Distance dist )
+        {
+
+
+            foreach (var item in MapData)
+            {
+                var distForm = dist.GetDistance(item.ProLat, item.ProLng, item.CustLat, item.CustLng, item.Unit);
+                MaxD.Add(item.ProID, distForm);
+                ctr++;
+            }
+
+            if (ctr == MapData.Count)
+            {
+                var providerid = from x in MaxD where x.Value == MaxD.Min(v => v.Value) select x.Key;
+                var closeest = from x in MaxD where x.Value == MaxD.Min(v => v.Value) select x.Value;
+
+                var result = providerid.First().ToString();
+                var resultTwo = int.Parse(result);
+                string providerName = (from p in db.Providers
+                                       where p.ProviderID == resultTwo 
+                                       select p.ProviderName).First().ToString();
+
+                return Json(providerName, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(null, JsonRequestBehavior.AllowGet);
+
+            }
+
+        }
+
     }
 }
 
