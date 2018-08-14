@@ -1,63 +1,65 @@
 @model ProviderAppver3.Customer
 
 
-     <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
-    <body>
-        @*modal code begin*@
-        <div id="overlay">
-            <div>
-                <h2>Average Highest Customer Rating</h2>
-                <h3 style="display:inline-block" id="providerName"></h3>
-                <span class="starFadeN" id="sRate1"></span><span class="starFadeN" id="sRate2"></span><span class="starFadeN" id="sRate3"></span><span class="starFadeN" id="sRate4"></span><span class="starFadeN" id="sRate5"></span>
-                <br>
-                <h2>Lowest Average Price</h2>
-                <h3 style="display:inline-block" id="providerName1"></h3>
-                <br>
-                <h2>Closest Provider to You</h2>
-                <h3 style="display:inline-block" id="providerName2"></h3>
-                <br>
+<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
+<body>
+    @*modal code begin*@
+    <div id="overlay">
+        <div>
+            <h2>Average Highest Customer Rating</h2>
+            <h3 style="display:inline-block" id="providerName"></h3>
+            <span class="starFadeN" id="sRate1"></span><span class="starFadeN" id="sRate2"></span><span class="starFadeN" id="sRate3"></span><span class="starFadeN" id="sRate4"></span><span class="starFadeN" id="sRate5"></span>
+            <br>
+            <h2>Lowest Average Price</h2>
+            <h3 style="display:inline-block" id="providerName1"></h3>
+            <br>
+            <h2>Closest Provider to You</h2>
+            <h3 style="display:inline-block" id="providerName2"></h3>
+            <br>
 
-                <a href='#' onclick='overlay()'>Click here to close</a>
+            <a href='#' onclick='overlay()'>Click here to close</a>
 
+        </div>
+    </div>
+    @*modal code end*@
+    <h4>Welcome @ViewBag.Name</h4>
+
+    <div class="row" id="ratingDiv" style="display:none">
+        <div class="col">
+
+            <button href='#' onclick="overlay((document.getElementById('textbox').value)), GetProvRankings(document.getElementById('textbox').value) ">Top rated active providers</button>
+
+        </div>
+    </div>
+
+    <hr />
+    <div class="row">
+        <div class="col-5">
+            <div class="search-container">
+                <input type="text" id="textbox" onfocus="ClearMap()" placeholder="Search For Services">
+                <input type="button" onclick="LoadProviders((document.getElementById('textbox').value))" value="Submit" />
             </div>
         </div>
-        @*modal code end*@
-        <h4>Welcome @ViewBag.Name</h4>
+    </div>
+    <div class="row">
+        <div class="col" id='map'></div>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
 
-        <div class="row" id="ratingDiv" style="display:none">
-            <div class="col">
 
-                <button href='#' onclick="overlay((document.getElementById('textbox').value)), GetProvRankings(document.getElementById('textbox').value) ">Top rated active providers</button>
 
-            </div>
-        </div>
 
-        <hr />
-        <div class="row">
-            <div class="col-5">
-                <div class="search-container">
-                    <input type="text" id="textbox" onfocus="ClearMap()" placeholder="Search For Services">
-                    <input type="button" onclick="LoadProviders((document.getElementById('textbox').value))" value="Submit" />
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col" id='map'></div>
-        </div>
+    <!-- popup -->
 
-        <p>
-            @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
-            @Html.ActionLink("Back to List", "Index")
-        </p>
+</body>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
 
-        <!-- popup -->
-        @ServerInfo.GetHtml()
-
-    </body>
-    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-
-    <script>
+<script>
+        //Chris - Generates customer marker
         var custLat;
         var custLng;
         var distance;
@@ -70,9 +72,9 @@
         LoadMap(ourdata)
     };
     OurRequest.send();
+        //Chris - End of customer marker code
 
-
-
+        //Chris - Loads the map and all the controls
     function LoadMap(results) {
         L.mapquest.key = 'b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6';
         // 'map' refers to a <div> element with the ID map
@@ -117,7 +119,7 @@
             });
         }
 
-
+        //Chris - goes to customer controller to Get Snow Providers function and passes info to AddMarkersToMap function
         var providers;
     function LoadProviders(text) {
         $.post('/Customers/GetSnowProviders', { text: text }, function (providers) {
@@ -128,6 +130,7 @@
             document.getElementById('ratingDiv').style.display = "block";
         });
     }
+        //Chris - This concats a url that pulls an array of customer details back then sends to CreateCustMarker function
     function addMarkersToMap(providers) {
         var RequestUrl = 'www.mapquestapi.com/geocoding/v1/batch?&inFormat=kvp&outFormat=json&thumbMaps=false&maxResults=1&location=';
         for (var i = 0; i < providers.length; i++) {
@@ -155,7 +158,7 @@
 
         var MapData = [];
         var IndvMark = [];
-
+        //Chris - This function generates both the provider markers and the text bubbles inside them - looks confusing because in order to put html inside of the popup, the html has to be in a string, but putting it directly into the popup will display the code. This way is the way it works.
  function CreateCustMarker(custdata, providers) {
             for (var i = 0; i < providers.length; i++) {
                 var providerID = providers[i].ProviderID;
@@ -173,7 +176,7 @@
                 MapData.push(Data);
             }
 
-
+     //Chris-provider marker style
         for (var i = 0; i < providers.length; i++) {
 
             icon = L.mapquest.textMarker([custdata.results[i].locations[0].displayLatLng.lat, custdata.results[i].locations[0].displayLatLng.lng], {
@@ -188,6 +191,7 @@
 
             });
 
+            //chris - popup contents
                      var rate = providers[i].ProviderPhone;
                      var rating = rate + '/5 Stars'
                         if (rate == 0) {
@@ -198,10 +202,13 @@
                      var text = providers[i].ProviderName;
                      var link = '<a href="/Providers/Details/1" target="_blank" style="font-size:20px">name</a>';
                      link = link.replace('name', text);
-                     link = link.replace('1', pid);
+            link = link.replace('1', pid);
+            var button = '<button class="btn btn-danger" onclick="OpenChat(provider)">Get A Quote</button>';
+            button = button.replace('provider', pid);
+            var premium = '<button class="btn btn-warning" onclick="PaymentProcessed()">Pay Premium</button>';
 
                      icon.addTo(fg);
-                     icon.bindPopup(link + '<br/>' + rating).addTo(fg);
+                     icon.bindPopup(link + '<hr/>' + rating + '<br/>' + button + '  OR  ' + premium).addTo(fg);
 
         }
      $.ajax({
@@ -220,6 +227,26 @@
      });
  }
 
+        //Chris chat script
+    function OpenChat(pid) {
+        var cid =  @Html.DisplayFor(m => m.CustomerID);
+        $.get('/Chats/GetChatID', { cid: cid, pid: pid }, function (chatid) {
+            if (chatid == 0) {
+                $.post('/Chats/Create', { cid: cid, pid: pid }, function (chatid) {
+                    window.location.assign('/Chats/Details/' + chatid);
+                })
+            }
+            window.location.assign('/Chats/Details/' + chatid);
+        });
+          
+    }
+
+        //chris - just a temp button for now until we get to payment info
+        function PaymentProcessed() {
+            alert('Your payment has been processed. Thank you.');
+        }
+
+        //Chris - clears provider markers when new entry is sent
         function ClearMap() {
             var layers = fg.getLayers();
 
@@ -245,4 +272,4 @@
     $(function(){
         SCRate();
     });
-    </script>
+</script>

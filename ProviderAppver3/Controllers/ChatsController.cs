@@ -37,11 +37,19 @@ namespace ProviderAppver3.Controllers
         }
 
         // GET: Chats/Create
-        public ActionResult Create()
+        public JsonResult GetChatID(int cid, int pid)
         {
-            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName");
-            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName");
-            return View();
+            int? chatid = (from c in db.Chats
+                          where c.CustomerID == cid &&
+                          c.ProviderID == pid
+                          select c.ChatID).First();
+
+            if (chatid == null)
+            {
+                chatid = 0;
+            }
+
+            return Json(chatid, JsonRequestBehavior.AllowGet);
         }
 
         // POST: Chats/Create
@@ -49,54 +57,28 @@ namespace ProviderAppver3.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ChatID,Message,ChatDate,IsRead,CustomerID,ProviderID")] Chat chat)
+        public JsonResult Create(int cid, int pid, Chat chat)
         {
             if (ModelState.IsValid)
             {
+                chat.CustomerID = cid;
+                chat.ProviderID = pid;
                 db.Chats.Add(chat);
                 db.SaveChanges();
-                return RedirectToAction("Index");
             }
 
-            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName", chat.CustomerID);
-            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName", chat.ProviderID);
-            return View(chat);
+            int? chatid = (from c in db.Chats
+                           where c.CustomerID == cid &&
+                           c.ProviderID == pid
+                           select c.ChatID).First();
+
+            return Json(chatid, JsonRequestBehavior.AllowGet);
+
+
+
         }
 
-        // GET: Chats/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Chat chat = db.Chats.Find(id);
-            if (chat == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName", chat.CustomerID);
-            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName", chat.ProviderID);
-            return View(chat);
-        }
-
-        // POST: Chats/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ChatID,Message,ChatDate,IsRead,CustomerID,ProviderID")] Chat chat)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(chat).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CustomerID = new SelectList(db.Customers, "CustomerID", "CustomerName", chat.CustomerID);
-            ViewBag.ProviderID = new SelectList(db.Providers, "ProviderID", "ProviderName", chat.ProviderID);
-            return View(chat);
-        }
+       
 
         // GET: Chats/Delete/5
         public ActionResult Delete(int? id)

@@ -7,52 +7,22 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Chat</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Message)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Message)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ChatDate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ChatDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.IsRead)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.IsRead)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Customer.CustomerName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Customer.CustomerName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Provider.ProviderName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Provider.ProviderName)
-        </dd>
-
-    </dl>
-</div>
+    <div class="col-xs-12 col-md-9 chat__body">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="list-group chat__main"></ul>
+            </div>
+            <div class="chat__type__body">
+                <div class="chat__type">
+                    <textarea id="msg_box" placeholder="Type your message"></textarea>
+                    <button class="btn btn-primary" id="sendMessage">Send</button>
+                </div>
+            </div>
+            <div class="chat__typing">
+                <span id="typerDisplay"></span>
+            </div>
+        </div>
+    </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ChatID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
