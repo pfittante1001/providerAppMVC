@@ -28,11 +28,30 @@ namespace ProviderAppver3.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+                 
             Chat chat = db.Chats.Find(id);
             if (chat == null)
             {
                 return HttpNotFound();
             }
+
+            int? custid = (from c in db.Chats where c.ChatID == id select c.CustomerID).First();
+            int? proid = (from c in db.Chats where c.ChatID == id select c.ProviderID).First();
+            int addid = (from a in db.Addresses where a.CustomerID == custid select a.AddressID).First();
+
+            Address location = db.Addresses.Find(addid);
+            string num = location.StreetNumber;
+            string street = location.StreetName;
+            string city = location.City;
+            string state = location.State;
+            var address = num + " " + street + ", " + city + ", " + state;
+
+            string cname = (from c in db.Customers where c.CustomerID == custid select c.CustomerName).First();
+
+            ViewBag.Pid = proid;
+            ViewBag.Name = cname;
+            ViewBag.Address = address;
+
             return View(chat);
         }
 
@@ -44,25 +63,18 @@ namespace ProviderAppver3.Controllers
                           c.ProviderID == pid
                           select c.ChatID).First();
 
-            if (chatid == null)
-            {
-                chatid = 0;
-            }
-
             return Json(chatid, JsonRequestBehavior.AllowGet);
         }
 
         // POST: Chats/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public JsonResult Create(int cid, int pid, Chat chat)
+
+        public JsonResult CreateFromMap(int cid, int pid, string search, string cname, Chat chat)
         {
             if (ModelState.IsValid)
             {
                 chat.CustomerID = cid;
                 chat.ProviderID = pid;
+                chat.Message = "You have a new request from " + cname + " regarding " + search + " services. ";
                 db.Chats.Add(chat);
                 db.SaveChanges();
             }
@@ -113,6 +125,21 @@ namespace ProviderAppver3.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public JsonResult GetCurrentAddress(int pid)
+        {
+           int PAddID = (from a in db.Addresses where a.ProviderID == pid select a.AddressID).First();
+
+            Address location = db.Addresses.Find(PAddID);
+            string num = location.StreetNumber;
+            string street = location.StreetName;
+            string city = location.City;
+            string state = location.State;
+            var paddress = num + " " + street + ", " + city + ", " + state;
+
+
+            return Json(paddress, JsonRequestBehavior.AllowGet);
         }
     }
 }

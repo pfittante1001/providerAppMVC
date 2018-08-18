@@ -4,25 +4,107 @@
     ViewBag.Title = "Details";
 }
 
+<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
+
 <h2>Details</h2>
 
-<div>
-    <div class="col-xs-12 col-md-9 chat__body">
-        <div class="row">
-            <div class="col-xs-12">
-                <ul class="list-group chat__main"></ul>
-            </div>
-            <div class="chat__type__body">
-                <div class="chat__type">
-                    <textarea id="msg_box" placeholder="Type your message"></textarea>
-                    <button class="btn btn-primary" id="sendMessage">Send</button>
-                </div>
-            </div>
-            <div class="chat__typing">
-                <span id="typerDisplay"></span>
-            </div>
-        </div>
-    </div>
+<p>@Html.DisplayFor(model => model.Message)</p>
+<div class="row" style="justify-content:flex-end">
+    <button class="btn-outline-dark" id="directions" style="margin:5px">Get Directions</button>
+</div>
+
+<div class="row">
+    <div class="col" id='map'></div>
+</div>
+
+
 <p>
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+
+    $("#directions").click(GetDirections);
+
+        //Chris - Generates customer marker
+        var custLat;
+        var custLng;
+        var distance;
+    var map;
+        var OurRequest = new XMLHttpRequest()
+        OurRequest.open('Get', 'http://www.mapquestapi.com/geocoding/v1/address?key=b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6&location=' + '@ViewBag.Address')
+    OurRequest.onload = function () {
+        var ourdata = JSON.parse(OurRequest.responseText);
+        console.log(ourdata)
+        LoadMap(ourdata)
+    };
+    OurRequest.send();
+        //Chris - End of customer marker code
+
+        //Chris - Loads the map and all the controls
+    function LoadMap(results) {
+        L.mapquest.key = 'b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6';
+        // 'map' refers to a <div> element with the ID map
+        var baseLayer = L.mapquest.tileLayer('map');
+        map = L.mapquest.map('map', {
+            center: [results.results[0].locations[0].displayLatLng.lat, results.results[0].locations[0].displayLatLng.lng],
+            layers: L.mapquest.tileLayer('satellite'),
+            zoom: 20
+        });
+        map.addControl(L.mapquest.control({ position: "topleft" }));
+        var marker = L.mapquest.textMarker([results.results[0].locations[0].displayLatLng.lat, results.results[0].locations[0].displayLatLng.lng], {
+            text: '@ViewBag.Name',
+            position: 'right',
+            type: 'circle',
+            icon: {
+                primaryColor: '#333333',
+                secondaryColor: '#333333',
+                size: 'sm'
+            }
+        });
+        marker.addTo(map);
+        var cadd = "@ViewBag.Address";
+        var cname = "@ViewBag.Name";
+        marker.bindPopup(cname + '<hr/>' + cadd);
+    };
+
+    function GetDirections() {
+        $.post('/Chats/GetCurrentAddress', { pid: "@ViewBag.Pid" }, function (paddress) {
+            var start = paddress;
+            var end = "@ViewBag.Address";
+            AddDirections(start, end); 
+        });      
+    };
+
+    function AddDirections(start, end) {
+        var directions = L.mapquest.directions();
+        directions.route({
+            start: start,
+            end: end,
+            options: {
+                enhancedNarrative: true
+            }
+        }, createMap);
+    }
+
+    function createMap(err, response) {
+
+        var directionsLayer = L.mapquest.directionsLayer({
+            directionsResponse: response
+        }).addTo(map);
+
+        var narrativeControl = L.mapquest.narrativeControl({
+            directionsResponse: response,
+            compactResults: true,
+            interactive: true
+        });
+
+        narrativeControl.setDirectionsLayer(directionsLayer);
+        narrativeControl.addTo(map);
+
+        document.getElementById("directions").style.display = "none";
+    }     
+
+    </script>
