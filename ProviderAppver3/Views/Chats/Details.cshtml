@@ -159,7 +159,10 @@ keyframes slideIn {
                 document.getElementById("providerhtml").style.display = "block";
             }
             if (role == "customer") {
-                document.getElementById("customerhtml").style.display = "block";
+                var message = "@Html.DisplayFor(model => model.Message)";
+                if (message.toLowerCase().indexOf("request") === -1) {
+                    document.getElementById("customerhtml").style.display = "block";
+                }
             }
         })
     });
