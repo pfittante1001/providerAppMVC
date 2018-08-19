@@ -237,8 +237,9 @@
             var cid =  @Html.DisplayFor(m => m.CustomerID);
             var search = document.getElementById("textbox").value;
             var cname = "@ViewBag.Name";
+            var message = "NULL";
             console.log(search);
-            $.post('/Chats/CreateFromMap', { cid: cid, pid: pid, search: search, cname: cname}, function (chatid) {
+            $.post('/Chats/CreateFromMap', { cid: cid, pid: pid, search: search, cname: cname, message: message}, function (chatid) {
                 var chathref = "/Chats/Details/" + chatid;
                 var a = document.getElementById("chatlink");
                 a.setAttribute('href', chathref);

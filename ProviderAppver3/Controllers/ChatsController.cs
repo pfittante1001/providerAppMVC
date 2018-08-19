@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ProviderAppver3;
+using Microsoft.AspNet.Identity;
 
 namespace ProviderAppver3.Controllers
 {
@@ -37,6 +38,7 @@ namespace ProviderAppver3.Controllers
 
             int? custid = (from c in db.Chats where c.ChatID == id select c.CustomerID).First();
             int? proid = (from c in db.Chats where c.ChatID == id select c.ProviderID).First();
+            string pname = (from p in db.Providers where p.ProviderID == proid select p.ProviderName).First();
             int addid = (from a in db.Addresses where a.CustomerID == custid select a.AddressID).First();
 
             Address location = db.Addresses.Find(addid);
@@ -49,8 +51,10 @@ namespace ProviderAppver3.Controllers
             string cname = (from c in db.Customers where c.CustomerID == custid select c.CustomerName).First();
 
             ViewBag.Pid = proid;
+            ViewBag.Cid = custid;
             ViewBag.Name = cname;
             ViewBag.Address = address;
+            ViewBag.Pname = pname;
 
             return View(chat);
         }
@@ -73,8 +77,8 @@ namespace ProviderAppver3.Controllers
             if (ModelState.IsValid)
             {
                 chat.CustomerID = cid;
-                chat.ProviderID = pid;
-                chat.Message = "You have a new request from " + cname + " regarding " + search + " services. ";
+                chat.ProviderID = pid;             
+                chat.Message = "You have a new request from " + cname + " regarding " + search + " services. ";            
                 db.Chats.Add(chat);
                 db.SaveChanges();
             }
@@ -88,6 +92,24 @@ namespace ProviderAppver3.Controllers
 
 
 
+        }
+
+        public JsonResult SendNewQuote(int cid, int pid, string message, Chat chat)
+        {
+            if (ModelState.IsValid)
+            {
+                chat.CustomerID = cid;
+                chat.ProviderID = pid;
+                chat.Message = message;
+                db.Chats.Add(chat);
+                db.SaveChanges();
+            }
+
+            int? chatid = (from c in db.Chats
+                           where c.CustomerID == cid &&
+                           c.ProviderID == pid
+                           select c.ChatID).First();
+            return Json(chatid, JsonRequestBehavior.AllowGet);
         }
 
        
@@ -140,6 +162,22 @@ namespace ProviderAppver3.Controllers
 
 
             return Json(paddress, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetUserRole(int pid)
+        {
+            var Puser = (from p in db.Providers where p.ProviderID == pid select p.UserName).First();
+            var role = "";
+            if (User.Identity.GetUserId() == Puser)
+            {
+                role = "provider";
+            }
+            else
+            {
+                role = "customer";
+            }
+
+            return Json(role, JsonRequestBehavior.AllowGet);
         }
     }
 }
