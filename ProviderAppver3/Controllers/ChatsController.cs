@@ -18,7 +18,19 @@ namespace ProviderAppver3.Controllers
         // GET: Chats
         public ActionResult Index()
         {
-            var chats = db.Chats.Include(c => c.Customer).Include(c => c.Provider);
+            var uid = User.Identity.GetUserId();
+            var isprovider = (from u in db.AspNetUsers where u.Id == uid select u.IsProvider).First();
+            if (isprovider.Equals(true))
+            {
+                var pid = (from p in db.Providers where p.ProviderEmail == User.Identity.Name select p.ProviderID).First();              
+                ViewBag.Pid = pid;              
+            }
+            if (isprovider.Equals(false))
+            {
+                var cid = (from c in db.Customers where c.CustomerEmail == User.Identity.Name select c.CustomerID).First();
+                ViewBag.Cid = cid;
+            }
+            var chats = db.Chats.Include(c => c.Customer).Include(c => c.Provider);             
             return View(chats.ToList());
         }
 
