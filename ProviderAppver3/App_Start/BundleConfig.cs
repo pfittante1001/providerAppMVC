@@ -18,6 +18,26 @@ namespace ProviderAppver3
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
+            bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/jquery.validate*",
+                        "~/Scripts/loadCustMarkers.js",
+                        "~/Scripts/loadMap.js",
+                        "~/Scripts/clearMap.js",
+                        "~/Scripts/createCustMarker.js",
+                        "~/Scripts/GetProvRankings.js",
+                        "~/Scripts/overlay.js",
+
+
+                        "~/Scripts/loadProviders.js",
+                        "~/Scripts/addMarkersToMap.js",
+                        //"~/Scripts/openChat.js",
+                        "~/Scripts/providerRankingsStar.js",
+                        "~/Scripts/rangeScript.js",
+                        "~/Scripts/ratingPop.js",
+                        "~/Scripts/slider.js",
+                        "~/Scripts/topProviderRankings.js"));
+
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js",

@@ -6,31 +6,28 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using ProviderAppver3.Models;
+using Newtonsoft.Json;
 
 namespace ProviderAppver3.Controllers
 {
-    public class Location
-    {
-        public double ProLat { get; set; }
-        public double ProLng { get; set; }
-        public double CustLat { get; set; }
-        public double CustLng { get; set; }
-        public char Unit { get; set; }
-        public int ProID { get; set; }
-        public int Counter { get; set; }
-
-    }
     public class CustomersController : Controller
     {
+        
+        
         private ProviderDBV2Entities db = new ProviderDBV2Entities();
-        public double ProLat { get; set; }
-        public double ProLng { get; set; }
-        public double CustLat { get; set; }
-        public double CustLng { get; set; }
-        public char Unit { get; set; }
-        public int ProID { get; set; }
-        public int Counter { get; set; }
-        public List<Location> MapData { get; set; }
+        //public int ProviderID { get; set; }
+        //public double ProLat { get; set; }
+        //public double ProLng { get; set; }
+        //public double CustLat { get; set; }
+        //public double CustLng { get; set; }
+        //public char Unit { get; set; }
+        //public int ProID { get; set; }
+        //public int Counter { get; set; }
+        //public Location Range { get; set; }
+        //public Location MapData { get; set; }
+        //public Location Providers { get; set; }
+
 
         // GET: Customers
         [Authorize]
@@ -250,20 +247,37 @@ namespace ProviderAppver3.Controllers
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+
         int ctr = 0;
-        Dictionary<int, double> MaxD = new Dictionary<int, double>();
-        public JsonResult GetDist(List<Location> MapData, ProviderAppver3.Models.Distance dist )
+        List<int> MaxR = new List<int>();
+        public JsonResult GetDist(ProviderAppver3.Models.Distance dist, ProviderAppver3.Models.Common model)
         {
 
+            Dictionary<int, double> MaxD = new Dictionary<int, double>();
 
-            foreach (var item in MapData)
+            MaxD.Clear();
+
+            foreach (var item in model.MapData)
             {
                 var distForm = dist.GetDistance(item.ProLat, item.ProLng, item.CustLat, item.CustLng, item.Unit);
-                MaxD.Add(item.ProID, distForm);
-                ctr++;
+                if (MaxD.ContainsKey(item.ProID))
+                {
+                    MaxD[item.ProID] = distForm;
+                    ctr++;
+                }
+                else
+                {
+                    MaxD.Add(item.ProID, distForm);
+                    ctr++;
+                }
+                if (distForm <= item.Range)
+                {
+                    MaxR.Add(item.ProID);
+                }
             }
 
-            if (ctr == MapData.Count)
+            if (ctr == model.MapData.Count)
             {
                 var providerid = from x in MaxD where x.Value == MaxD.Min(v => v.Value) select x.Key;
                 var closeest = from x in MaxD where x.Value == MaxD.Min(v => v.Value) select x.Value;
@@ -271,10 +285,28 @@ namespace ProviderAppver3.Controllers
                 var result = providerid.First().ToString();
                 var resultTwo = int.Parse(result);
                 string providerName = (from p in db.Providers
-                                       where p.ProviderID == resultTwo 
+                                       where p.ProviderID == resultTwo
                                        select p.ProviderName).First().ToString();
 
-                return Json(providerName, JsonRequestBehavior.AllowGet);
+                List<object> SelectedProv = new List<object>();
+                for (int i = 0; i < MaxR.Count; i++)
+                {
+                    var temp = MaxR[i];
+                    var tempOne = model.Prov[i].ProviderID;
+                    if (MaxR.Contains(tempOne))
+                    {
+                        SelectedProv.Add(model.Prov[i]);
+                    }
+                }
+
+                var data = new
+                {
+                    dist = new { providerName },
+                    prov = new { SelectedProv }
+
+                };
+
+                return Json(data, JsonRequestBehavior.AllowGet);
             }
             else
             {
@@ -284,6 +316,43 @@ namespace ProviderAppver3.Controllers
 
         }
 
+        //int ctr1 = 0;
+        //List<int> MaxR = new List<int>();
+        //List<object> SelectedProv = new List<object>();
+        //public JsonResult GetRange(List<Location> ProvRange, List<Location> providers, ProviderAppver3.Models.Distance dist)
+        //{
+
+
+        //    foreach (var item in ProvRange)
+        //    {
+        //        var distForm = dist.GetDistance(item.ProLat, item.ProLng, item.CustLat, item.CustLng, item.Unit);
+
+        //        if (distForm <= item.Range)
+        //        {
+        //            MaxR.Add(item.ProID);
+        //            ctr1++;
+        //        }
+        //        else
+        //        {
+        //            ctr1++;
+        //        }
+
+
+        //    }
+
+
+        //    for (int i = 0; i < postFile.MapData.Count; i++)
+        //    {
+        //        if (MaxR.Contains(Providers[i].ProviderID))
+        //        {
+
+        //            SelectedProv.Add(providers[i]);
+        //        }
+        //    }
+
+        //    return Json(SelectedProv, JsonRequestBehavior.AllowGet);
+        //}
     }
 }
+
 

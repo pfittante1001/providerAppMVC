@@ -1,248 +1,84 @@
 @model ProviderAppver3.Customer
 
 
-     <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
-    <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
-    <body>
-        @*modal code begin*@
-        <div id="overlay">
-            <div>
-                <h2>Average Highest Customer Rating</h2>
-                <h3 style="display:inline-block" id="providerName"></h3>
-                <span class="starFadeN" id="sRate1"></span><span class="starFadeN" id="sRate2"></span><span class="starFadeN" id="sRate3"></span><span class="starFadeN" id="sRate4"></span><span class="starFadeN" id="sRate5"></span>
-                <br>
-                <h2>Lowest Average Price</h2>
-                <h3 style="display:inline-block" id="providerName1"></h3>
-                <br>
-                <h2>Closest Provider to You</h2>
-                <h3 style="display:inline-block" id="providerName2"></h3>
-                <br>
+<body>
 
-                <a href='#' onclick='overlay()'>Click here to close</a>
+    @*modal code begin*@
+    <div id="overlay">
+        <div>
+            <h2>Average Highest Customer Rating</h2>
+            <h3 style="display:inline-block" id="providerName"></h3>
+            <span class="starFadeN" id="sRate1"></span><span class="starFadeN" id="sRate2"></span><span class="starFadeN" id="sRate3"></span><span class="starFadeN" id="sRate4"></span><span class="starFadeN" id="sRate5"></span>
+            <br>
+            <h2>Lowest Average Price</h2>
+            <h3 style="display:inline-block" id="providerName1"></h3>
+            <br>
+            <h2>Closest Provider to You</h2>
+            <h3 style="display:inline-block" id="providerName2"></h3>
+            <br>
 
-            </div>
+            <a href='#' onclick='overlay()'>Click here to close</a>
+
         </div>
-        @*modal code end*@
-        <h4>Welcome @ViewBag.Name</h4>
-
-        <div class="row" id="ratingDiv" style="display:none">
+    </div>
+    @*modal code end*@
+    <h4>Welcome @ViewBag.Name</h4>
+    <div class="container">
+        <div class="row" id="ratingDiv">
             <div class="col">
-
-                <button href='#' onclick="overlay((document.getElementById('textbox').value)), GetProvRankings(document.getElementById('textbox').value) ">Top rated active providers</button>
-
+                <button href='#' onclick="overlay((document.getElementById('textbox').value)), GetProvRankings(document.getElementById('textbox').value)">Top rated active providers</button>
             </div>
-        </div>
-
-        <hr />
-        <div class="row">
-            <div class="col-5">
+            <div class="col slidecontainer" id="slide" style="display:none">
+                <input type="range" min="1" max="12" value="6" class="slider" id="myRange" onclick="LoadMap(ourdata)" onfocus="ClearMap()">
+            </div>
+            <div class="col">
                 <div class="search-container">
                     <input type="text" id="textbox" onfocus="ClearMap()" placeholder="Search For Services">
                     <input type="button" onclick="LoadProviders((document.getElementById('textbox').value))" value="Submit" />
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col" id='map'></div>
+        <div class="row" id="ratingTwo">
+            <div class="col">
+            </div>
+            <div class="col" id="slideTwo" style="display:none">
+                <p>Slide to adjust distance to providers: <span id="demo"></span></p>
+                <br />
+                <p>Press submit to continue.</p>
+            </div>
+            <div class="col">
+                
+            </div>
         </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col" id='map'></div>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
 
-        <p>
-            @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
-            @Html.ActionLink("Back to List", "Index")
-        </p>
-
-        <!-- popup -->
-        @ServerInfo.GetHtml()
-
-    </body>
-    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-
-    <script>
+<script>
+        //Chris - Generates customer marker
         var custLat;
         var custLng;
         var distance;
-    var map;
+        var map;
         var OurRequest = new XMLHttpRequest()
         OurRequest.open('Get', 'http://www.mapquestapi.com/geocoding/v1/address?key=b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6&location=' + '@ViewBag.Address')
-    OurRequest.onload = function () {
-        var ourdata = JSON.parse(OurRequest.responseText);
-        console.log(ourdata)
+        OurRequest.onload = function () {
+        ourdata = JSON.parse(OurRequest.responseText);
         LoadMap(ourdata)
     };
     OurRequest.send();
-
-
-
-    function LoadMap(results) {
-        L.mapquest.key = 'b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6';
-        // 'map' refers to a <div> element with the ID map
-        var baseLayer = L.mapquest.tileLayer('map');
-        map = L.mapquest.map('map', {
-            center: [results.results[0].locations[0].displayLatLng.lat, results.results[0].locations[0].displayLatLng.lng],
-            layers: [baseLayer, fg],
-            zoom: 15
-        });
-        map.addControl(L.mapquest.control());
-        var marker = L.mapquest.textMarker([results.results[0].locations[0].displayLatLng.lat, results.results[0].locations[0].displayLatLng.lng], {
-            text: '@ViewBag.Name',
-            position: 'right',
-            type: 'marker',
-            icon: {
-                primaryColor: '#333333',
-                secondaryColor: '#333333',
-                size: 'sm'
-            }
-        });
-        marker.addTo(map);
-        custLat = results.results[0].locations[0].displayLatLng.lat;
-        custLng = results.results[0].locations[0].displayLatLng.lng;
-        L.control.layers({
-            'Map': baseLayer,
-            'Hybrid': L.mapquest.tileLayer('hybrid'),
-            'Satellite': L.mapquest.tileLayer('satellite'),
-            'Light': L.mapquest.tileLayer('light'),
-            'Dark': L.mapquest.tileLayer('dark')
-        }).addTo(map);
-    };
-
-    //pete get top ranking of snow providers script
-        function GetProvRankings(text) {
-            $.post('/Customers/GetProvRankings', { text: text }, function (providers) {
-                console.log(providers);
-                document.getElementById('providerName').innerHTML = providers.providerName
-                document.getElementById('providerName1').innerHTML = providers.providerName
-                for (var i = 1; i <= providers.maxRating; i++) {
-                     $("#sRate" + i).attr('class', 'starGlowN');
-                 }
-            });
+        //chris - just a temp button for now until we get to payment info
+        function PaymentProcessed() {
+            alert('Your payment has been processed. Thank you.');
         }
-
-
-        var providers;
-    function LoadProviders(text) {
-        $.post('/Customers/GetSnowProviders', { text: text }, function (providers) {
-
-            console.log(providers);
-            providers = providers;
-            addMarkersToMap(providers);
-            document.getElementById('ratingDiv').style.display = "block";
-        });
-    }
-    function addMarkersToMap(providers) {
-        var RequestUrl = 'www.mapquestapi.com/geocoding/v1/batch?&inFormat=kvp&outFormat=json&thumbMaps=false&maxResults=1&location=';
-        for (var i = 0; i < providers.length; i++) {
-            if (i == 0) {
-                RequestUrl += providers[i].Description;
-            }
-            else {
-                RequestUrl += '&location=' + providers[i].Description;
-            }
-            console.log(providers[i].Description)
-        }
-        RequestUrl += '&key=b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6'
-        console.log(RequestUrl);
-        var OurRequest = new XMLHttpRequest()
-        OurRequest.open('Get', 'http://' + RequestUrl)
-        OurRequest.onload = function () {
-            var custdata = JSON.parse(OurRequest.responseText);
-            console.log(custdata)
-            CreateCustMarker(custdata, providers);
-        };
-        OurRequest.send();
-        };
-        var icon;
-        var fg = L.featureGroup();
-
-        var MapData = [];
-        var IndvMark = [];
-
- function CreateCustMarker(custdata, providers) {
-            for (var i = 0; i < providers.length; i++) {
-                var providerID = providers[i].ProviderID;
-                var proLat = custdata.results[i].locations[0].displayLatLng.lat;
-                var proLng = custdata.results[i].locations[0].displayLatLng.lng;
-                var unit = "K";
-                var Data = {
-                    ProID: providerID,
-                    ProLat: proLat,
-                    ProLng: proLng,
-                    CustLat: custLat,
-                    CustLng: custLng,
-                    Unit: unit
-                };
-                MapData.push(Data);
-            }
-
-
-        for (var i = 0; i < providers.length; i++) {
-
-            icon = L.mapquest.textMarker([custdata.results[i].locations[0].displayLatLng.lat, custdata.results[i].locations[0].displayLatLng.lng], {
-                text: providers[i].ProviderName,
-                position: 'right',
-                type: 'marker',
-                icon: {
-                    primaryColor: '#3582ff',
-                    secondaryColor: '#ff3535',
-                    size: 'sm'
-                }
-
-            });
-
-                     var rate = providers[i].ProviderPhone;
-                     var rating = rate + '/5 Stars'
-                        if (rate == 0) {
-                            rating = "This Provider has not yet been rated"
-                        }
-                     var pid = providers[i].ProviderID;
-                     console.log(pid)
-                     var text = providers[i].ProviderName;
-                     var link = '<a href="/Providers/Details/1" target="_blank" style="font-size:20px">name</a>';
-                     link = link.replace('name', text);
-                     link = link.replace('1', pid);
-
-                     icon.addTo(fg);
-                     icon.bindPopup(link + '<br/>' + rating).addTo(fg);
-
-        }
-     $.ajax({
-                //url: '/Customers/GetDistance',
-                url: "@Url.Action("GetDist")",
-                dataType: 'json',
-                type: 'POST',
-                data: JSON.stringify(MapData),
-                contentType: 'application/json; charset=utf-8',
-                success: function (providerName) {
-                    document.getElementById('providerName2').innerHTML = providerName
-                },
-                error: function () {
-                    alert("error");
-                }
-     });
- }
-
-        function ClearMap() {
-            var layers = fg.getLayers();
-
-            for (var i = 0; i < layers.length; i++) {
-
-                fg.removeLayer(layers[i]);
-            }
-        }
- //pete modal script
-
-        function overlay() {
-            el = document.getElementById("overlay");
-            el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
-        }
-
-        function SCRate() {
-            var totalRating = document.getElementById('providerRating').innerHTML.value;
-
-        for (var i = 1; i <= totalRating; i++) {
-            $("#sRate" + i).attr('class', 'starGlowN');
-        }
-    }
-    $(function(){
-        SCRate();
-    });
-    </script>
+</script>
+<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
