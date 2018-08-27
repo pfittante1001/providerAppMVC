@@ -85,7 +85,8 @@ namespace ProviderAppver3.Controllers
         {
             if (ModelState.IsValid)
             {
-                customer.UserName = User.Identity.GetUserId(); //makes asp.net user email equal to the customer email
+                customer.UserName = User.Identity.GetUserId();
+                customer.CustomerEmail = User.Identity.Name;
                 db.Customers.Add(customer);
                 db.SaveChanges();
                 return RedirectToAction("Create", "Addresses");

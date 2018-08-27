@@ -4,55 +4,286 @@
     ViewBag.Title = "Details";
 }
 
+<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
+<style>
+#providerhtml, #customerhtml{
+    display:none;
+}
+
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    -webkit-animation-name: fadeIn; /* Fade in the background */
+    -webkit-animation-duration: 0.4s;
+    animation-name: fadeIn;
+    animation-duration: 0.4s
+}
+
+/* Modal Content */
+.modal-content {
+    position: fixed;
+    justify-content:center!important;
+    bottom: 0;
+    background-color: #fefefe;
+    width: 100%;
+    -webkit-animation-name: slideIn;
+    -webkit-animation-duration: 0.4s;
+    animation-name: slideIn;
+    animation-duration: 0.4s
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modal-header.head {
+    justify-content: center;
+    text-align: center;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+    justify-content:center!important;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+/* Add Animation */
+-webkit-keyframes slideIn {
+    flow-from: bottom; opacity: 0}
+    to {bottom: 0; opacity: 1}
+}
+
+keyframes slideIn {
+    flow-from: bottom; opacity: 0}
+    to {bottom: 0; opacity: 1}
+}
+
+</style>
+
 <h2>Details</h2>
 
-<div>
-    <h4>Chat</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Message)
-        </dt>
+    <p>@Html.DisplayFor(model => model.Message)</p>
+    <div id="providerhtml">
+        <div class="row" style="justify-content:flex-end">
+            <button class="btn btn-outline-success" id="quoteform" style="margin:5px">Send A Quote</button>
+            <button class="btn-outline-dark" id="directions" style="margin:5px">Get Directions</button>
+        </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Message)
-        </dd>
+        <div class="row">
+            <div class="col" id='map'></div>
+        </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ChatDate)
-        </dt>
+        <div id="myModal" class="modal">
 
-        <dd>
-            @Html.DisplayFor(model => model.ChatDate)
-        </dd>
+            <!-- Modal content -->
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h2 class="head">Quote</h2>
+                    <span class="close">&times;</span>
+                </div>
+                <form>
+                    Quote:<br>
+                    $<input id="quote" type="text" name="quote">
+                    <br>
+                    Estimated Time of Arrival:<br>
+                    <input id="eta" type="text" name="eta">
+                    <br>
+                    Additional Comments:<br>
+                    <textarea id="comments" type="text" name="comments"></textarea>
+                    <br><br /> 
+                    <p id="complete"></p>
+                </form>
+                <div class="row justify-content-center" >
+                    <button class="btn btn-dark" id"="submitform">Submit</button>
+                </div>
+                <div class="modal-footer">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.IsRead)
-        </dt>
+                </div>
+            </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.IsRead)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Customer.CustomerName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Customer.CustomerName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Provider.ProviderName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Provider.ProviderName)
-        </dd>
-
-    </dl>
+        </div>
+    </div>
+<div id="customerhtml">
+    <p>Would you like to accept this quote and continue to billing?</p>
+    <form action="">  
+    <input type="radio" name="continue" value="yes" />Yes<br />
+    <input type="radio" name="continue" value="no" />No<br /><br />
+    <input type="submit" value="Submit" />
+    </form>
 </div>
+
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ChatID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+    // Show div html based on role
+    $(document).ready(function () {
+        $.post("/Chats/GetUserRole", { pid: "@ViewBag.Pid" }, function (role) {
+            console.log(role);
+            if (role == "provider") {
+                document.getElementById("providerhtml").style.display = "block";
+            }
+            if (role == "customer") {
+                var message = "@Html.DisplayFor(model => model.Message)";
+                if (message.toLowerCase().indexOf("request") === -1) {
+                    document.getElementById("customerhtml").style.display = "block";
+                }
+            }
+        })
+    });
+
+    $("#directions").click(GetDirections);
+
+        //Chris - Generates customer marker
+        var custLat;
+        var custLng;
+        var distance;
+    var map;
+        var OurRequest = new XMLHttpRequest()
+        OurRequest.open('Get', 'http://www.mapquestapi.com/geocoding/v1/address?key=b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6&location=' + '@ViewBag.Address')
+    OurRequest.onload = function () {
+        var ourdata = JSON.parse(OurRequest.responseText);
+        console.log(ourdata)
+        LoadMap(ourdata)
+    };
+    OurRequest.send();
+        //Chris - End of customer marker code
+
+        //Chris - Loads the map and all the controls
+    function LoadMap(results) {
+        L.mapquest.key = 'b13zAYNPuUz6uaAeUCrHk3BvhAt0UnR6';
+        // 'map' refers to a <div> element with the ID map
+        var baseLayer = L.mapquest.tileLayer('map');
+        map = L.mapquest.map('map', {
+            center: [results.results[0].locations[0].displayLatLng.lat, results.results[0].locations[0].displayLatLng.lng],
+            layers: L.mapquest.tileLayer('satellite'),
+            zoom: 20
+        });
+        map.addControl(L.mapquest.control({ position: "topleft" }));
+        var marker = L.mapquest.textMarker([results.results[0].locations[0].displayLatLng.lat, results.results[0].locations[0].displayLatLng.lng], {
+            text: '@ViewBag.Name',
+            position: 'left',
+            type: 'circle',
+            icon: {
+                primaryColor: '#333333',
+                secondaryColor: '#333333',
+                size: 'sm'
+            }
+        });
+        marker.addTo(map);
+        var cadd = "@ViewBag.Address";
+        var cname = "@ViewBag.Name";
+        marker.bindPopup(cname + '<hr/>' + cadd);
+    };
+
+    function GetDirections() {
+        $.post('/Chats/GetCurrentAddress', { pid: "@ViewBag.Pid" }, function (paddress) {
+            var start = paddress;
+            var end = "@ViewBag.Address";
+            AddDirections(start, end); 
+        });      
+    };
+
+    function AddDirections(start, end) {
+        var directions = L.mapquest.directions();
+        directions.route({
+            start: start,
+            end: end,
+            options: {
+                enhancedNarrative: true
+            }
+        }, createMap);
+    }
+
+    function createMap(err, response) {
+
+        var directionsLayer = L.mapquest.directionsLayer({
+            directionsResponse: response
+        }).addTo(map);
+
+        var narrativeControl = L.mapquest.narrativeControl({
+            directionsResponse: response,
+            compactResults: true,
+            interactive: true
+        });
+
+        narrativeControl.setDirectionsLayer(directionsLayer);
+        narrativeControl.addTo(map);
+
+        document.getElementById("directions").style.display = "none";
+    }     
+
+    // Get the modal
+    var modal = document.getElementById('myModal');
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("quoteform");
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on the button, open the modal 
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    $("#submitform").click(RedirectAndSubmit);
+
+    function RedirectAndSubmit() {
+        var message = "You have a new quote from @ViewBag.Pname.";
+
+        $.post('/Chats/SendNewQuote', { Pid: "@ViewBag.Pid", Cid: "@ViewBag.Cid", message: message }, function (chatid) {
+            console.log(chatid);
+            document.getElementById("complete").innerText = "Your quote has been submitted."
+        })
+
+    }
+
+    </script>

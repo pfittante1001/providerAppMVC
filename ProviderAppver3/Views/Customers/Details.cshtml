@@ -1,8 +1,10 @@
 @model ProviderAppver3.Customer
 
 
-<body>
 
+<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
+<body>
     @*modal code begin*@
     <div id="overlay">
         <div>
@@ -23,6 +25,7 @@
     </div>
     @*modal code end*@
     <h4>Welcome @ViewBag.Name</h4>
+
     <div class="container">
         <div class="row" id="ratingDiv">
             <div class="col">
@@ -47,11 +50,12 @@
                 <p>Press submit to continue.</p>
             </div>
             <div class="col">
-                
+                <p>Your message has been sent. Click <span><a id="chatlink" href="">here</a></span> to view.</p>
+                <button onclick="Closediv()">Close</button>
             </div>
         </div>
     </div>
-    <hr />
+    
     <div class="row">
         <div class="col" id='map'></div>
     </div>
@@ -59,7 +63,9 @@
         @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
         @Html.ActionLink("Back to List", "Index")
     </p>
+
 </body>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
 
 <script>
         //Chris - Generates customer marker
@@ -74,11 +80,30 @@
         LoadMap(ourdata)
     };
     OurRequest.send();
+
+        //Chris chat script
+        function OpenChat(pid) {
+            var cid =  @Html.DisplayFor(m => m.CustomerID);
+            var search = document.getElementById("textbox").value;
+            var cname = "@ViewBag.Name";
+            var message = "NULL";
+            console.log(search);
+            $.post('/Chats/CreateFromMap', { cid: cid, pid: pid, search: search, cname: cname, message: message}, function (chatid) {
+                var chathref = "/Chats/Details/" + chatid;
+                var a = document.getElementById("chatlink");
+                a.setAttribute('href', chathref);
+                document.getElementById('dialog').style.display = "block";
+            });
+        }
+
+    function Closediv() {
+        document.getElementById('dialog').style.display = "none";
+    }
+
         //chris - just a temp button for now until we get to payment info
         function PaymentProcessed() {
             alert('Your payment has been processed. Thank you.');
         }
+
+        
 </script>
-<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
-<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css" />
-<script src="~/Scripts/jquery-3.3.1.min.js"></script>

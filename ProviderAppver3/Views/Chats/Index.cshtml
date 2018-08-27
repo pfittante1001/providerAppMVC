@@ -1,57 +1,41 @@
 ﻿@model IEnumerable<ProviderAppver3.Chat>
-
 @{
     ViewBag.Title = "Index";
 }
+<h2>Messages</h2>
 
-<h2>Index</h2>
+@foreach (var item in Model)
+{
+    if (item.CustomerID == ViewBag.Cid)
+    {
+        <div class="row">
+            <div class="chatbody">
+                <h2>You have a new quote!</h2>
+                <a href="#" onclick="Markasread(this); return false;">Mark as read</a>
+            </div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Message)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ChatDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsRead)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Customer.CustomerName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Provider.ProviderName)
-        </th>
-        <th></th>
-    </tr>
+            @Html.ActionLink("Edit", "Edit", new { id = item.ChatID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ChatID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ChatID })
+        </div>
+    }
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Message)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ChatDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsRead)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Customer.CustomerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Provider.ProviderName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ChatID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ChatID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ChatID })
-        </td>
-    </tr>
+    if (item.ProviderID == ViewBag.Pid)
+    {
+        <div class="row">
+            <div class="chatbody" style="font-weight:bold">
+                <h2>You have a new request</h2>
+                <a href="#" onclick="Markasread(this); return false;">Mark as read</a>
+            </div>
+            @Html.ActionLink("Edit", "Edit", new { id = item.ChatID }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ChatID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ChatID })
+        </div>
+        }
 }
 
-</table>
+<script>
+    function Markasread(e) {
+        e.style.backgroundcolor = "red";
+    }
+</script>
