@@ -17,6 +17,10 @@ namespace ProviderAppver3.Controllers
         {
             return View();
         }
+        public ActionResult Chat()
+        {
+            return View("ChatView");
+        }
 
         public ActionResult About()
         {

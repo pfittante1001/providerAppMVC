@@ -12,22 +12,8 @@ using Newtonsoft.Json;
 namespace ProviderAppver3.Controllers
 {
     public class CustomersController : Controller
-    {
-        
-        
+    {       
         private ProviderDBV2Entities db = new ProviderDBV2Entities();
-        //public int ProviderID { get; set; }
-        //public double ProLat { get; set; }
-        //public double ProLng { get; set; }
-        //public double CustLat { get; set; }
-        //public double CustLng { get; set; }
-        //public char Unit { get; set; }
-        //public int ProID { get; set; }
-        //public int Counter { get; set; }
-        //public Location Range { get; set; }
-        //public Location MapData { get; set; }
-        //public Location Providers { get; set; }
-
 
         // GET: Customers
         [Authorize]
@@ -316,43 +302,6 @@ namespace ProviderAppver3.Controllers
             }
 
         }
-
-        //int ctr1 = 0;
-        //List<int> MaxR = new List<int>();
-        //List<object> SelectedProv = new List<object>();
-        //public JsonResult GetRange(List<Location> ProvRange, List<Location> providers, ProviderAppver3.Models.Distance dist)
-        //{
-
-
-        //    foreach (var item in ProvRange)
-        //    {
-        //        var distForm = dist.GetDistance(item.ProLat, item.ProLng, item.CustLat, item.CustLng, item.Unit);
-
-        //        if (distForm <= item.Range)
-        //        {
-        //            MaxR.Add(item.ProID);
-        //            ctr1++;
-        //        }
-        //        else
-        //        {
-        //            ctr1++;
-        //        }
-
-
-        //    }
-
-
-        //    for (int i = 0; i < postFile.MapData.Count; i++)
-        //    {
-        //        if (MaxR.Contains(Providers[i].ProviderID))
-        //        {
-
-        //            SelectedProv.Add(providers[i]);
-        //        }
-        //    }
-
-        //    return Json(SelectedProv, JsonRequestBehavior.AllowGet);
-        //}
     }
 }
 
