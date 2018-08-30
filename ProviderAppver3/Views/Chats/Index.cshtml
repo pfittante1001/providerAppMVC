@@ -10,7 +10,7 @@
     {
         <div class="row">
             <div class="chatbody">
-                <h2>You have a new quote!</h2>
+                <h2>You have a new quote from @Html.DisplayFor(modelItem => item.Provider.ProviderName)</h2>
                 <a href="#" onclick="Markasread(this); return false;">Mark as read</a>
             </div>
 
@@ -24,18 +24,20 @@
     {
         <div class="row">
             <div class="chatbody" style="font-weight:bold">
-                <h2>You have a new request</h2>
+                <h2>You have a new request from @Html.DisplayFor(modelItem => item.Customer.CustomerName)</h2>
                 <a href="#" onclick="Markasread(this); return false;">Mark as read</a>
             </div>
             @Html.ActionLink("Edit", "Edit", new { id = item.ChatID }) |
             @Html.ActionLink("Details", "Details", new { id = item.ChatID }) |
             @Html.ActionLink("Delete", "Delete", new { id = item.ChatID })
         </div>
-        }
+    }
 }
+
+
 
 <script>
     function Markasread(e) {
-        e.style.backgroundcolor = "red";
+        e.style.backgroundColor = "red";
     }
 </script>
