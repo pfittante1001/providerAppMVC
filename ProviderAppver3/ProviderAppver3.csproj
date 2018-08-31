@@ -288,17 +288,21 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Account.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Home.css" />
     <Content Include="Content\images\ajax-loader.gif" />
+    <Content Include="Content\images\board-bright-design-235994.jpg" />
     <Content Include="Content\images\file.gif" />
     <Content Include="Content\images\folder-closed.gif" />
     <Content Include="Content\images\folder.gif" />
     <Content Include="Content\images\minus.gif" />
+    <Content Include="Content\images\photomania-8d7616fb452897001f7a288bc7c7b8a5.jpg" />
     <Content Include="Content\images\plus.gif" />
     <Content Include="Content\images\treeview-black-line.gif" />
     <Content Include="Content\images\treeview-black.gif" />

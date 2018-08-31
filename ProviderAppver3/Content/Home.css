@@ -1,0 +1,377 @@
+﻿
+body {
+    margin: 0px;
+    padding: 0px;
+    background-image: url('images/board-bright-design-235994.jpg');
+    background-attachment: fixed;
+    background-position: bottom;
+    background-size: cover;
+    background-repeat: no-repeat;
+    max-height: 100vh;
+}
+
+
+
+
+.overlay {
+    padding: 10px;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    background-image: url('images/photomania-8d7616fb452897001f7a288bc7c7b8a5.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+    height: 60vh;
+    box-shadow: 2px 5px 15px #000000;
+}
+
+
+
+
+
+
+
+
+
+
+
+#rowscreen {
+    position: absolute;
+    height: 30vh;
+    width: 100%;
+    top: 55vh;
+}
+
+
+
+
+
+
+
+
+
+
+
+.overlay3 {
+    background-color: rgb(249, 249, 249);
+    width: 100%;
+    justify-content: center;
+    padding: 0px;
+}
+
+
+
+
+
+
+
+
+
+
+
+ul {
+    list-style: circle;
+    color: grey;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    margin-left: 30%;
+}
+
+
+
+
+
+
+
+
+
+
+
+li {
+    justify-content: flex-start;
+}
+
+
+
+
+
+
+
+
+
+
+
+h1 {
+    padding-top: 15vh;
+    color: white !important;
+    text-shadow: 1px 1px 1px #000000;
+    letter-spacing: 4px;
+    font-weight: 400;
+    font-size: 70px;
+    font-family: 'Poller One', cursive;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+h2, h3, h4 {
+    color: grey !important;
+    text-shadow: 1px 1px 1px #000000;
+    letter-spacing: 4px;
+    font-weight: 400;
+    font-size: xx-large;
+    font-family: 'Poller One', cursive;
+}
+
+
+
+
+#login {
+    padding-top: 14px;
+    display: flex !important;
+    justify-content: flex-end !important;
+    margin-right: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#tag {
+    color: white;
+    font-size: 20px;
+    margin-top: 80px;
+}
+
+
+
+
+
+
+
+
+
+
+
+a {
+    color: black !important;
+    font-size: 18px;
+    text-decoration: none !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+    a:hover {
+        color: lightgrey !important;
+    }
+
+
+
+
+
+
+
+
+
+
+
+footer {
+    text-align: center;
+    justify-content: center;
+    position: absolute !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 50px !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+.btn-default {
+    color: white !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+    .btn-default:hover {
+        color: lightgray !important;
+    }
+
+
+
+
+
+
+
+
+
+
+
+.screen {
+    z-index: 2;
+    padding: 10px;
+    background-color: white;
+    text-align: center;
+    justify-content: center;
+    box-shadow: 2px 2px 8px #000000;
+    border-radius: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.button {
+    justify-content: center !important;
+    align-content: center !important;
+    text-align: center !important;
+    margin-left: 10vw;
+    border-radius: 4px;
+    background-color: #f4511e;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 28px;
+    padding: 10px;
+    width: 200px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+    .button span {
+        cursor: pointer;
+        display: block;
+        position: relative;
+        transition: 0.5s;
+    }
+
+
+
+
+
+
+
+
+
+
+
+        .button span:after {
+            content: '\00bb';
+            position: absolute;
+            opacity: 0;
+            top: 0;
+            right: -20px;
+            transition: 0.5s;
+        }
+
+
+
+
+
+
+
+
+
+
+
+    .button:hover span {
+        padding-right: 25px;
+    }
+
+
+
+
+
+
+
+
+
+
+
+        .button:hover span:after {
+            opacity: 1;
+            right: 0;
+        }
+
+
+
+
+
+
+
+
+
+
+
+p.text-center {
+    margin-top: 1px;
+    padding-top: 1px;
+    margin-bottom: 1px;

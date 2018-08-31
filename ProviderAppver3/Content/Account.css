@@ -1,0 +1,75 @@
+﻿
+body{
+    animation: colorchange 50s infinite; /* animation-name followed by duration in seconds*/
+    /* you could also use milliseconds (ms) or something like 2.5s */
+    -webkit-animation: colorchange 50s infinite; /* Chrome and Safari */
+    color: #FFFFFF;
+}
+
+@keyframes colorchange {
+
+    0% {
+        background: red;
+    }
+
+    25% {
+        background: goldenrod;
+    }
+
+    50% {
+        background: green;
+    }
+
+    75% {
+        background: blue;
+    }
+
+    100% {
+        background: red;
+    }
+}
+
+@-webkit-keyframes colorchange /* Safari and Chrome - necessary duplicate */
+{
+
+    0% {
+        background: red;
+    }
+
+
+    25% {
+        background: goldenrod;
+    }
+
+
+    50% {
+        background: green;
+    }
+
+
+    75% {
+        background: blue;
+    }
+
+    100% {
+        background: red;
+    }
+}
+
+
+a.my-class {
+    color: #FFFFFF;
+}
+
+
+    a.my-class:active {
+        color: #FFFFFF;
+    }
+
+    a.my-class:link {
+        color: #FFFFFF;
+    }
+
+    a.my-class:visited {
+        color: #FFFFFF;
+    }
