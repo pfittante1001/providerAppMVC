@@ -82,7 +82,9 @@ function CreateCustMarker(custdata, providers) {
                         star5 = star5.replace('starFadeN', 'starGlowN');
                     }
                 }
-                var rating = star1 + star2 + star3 + star4 + star5;
+                var startdiv = '<div class="text-center">';
+                var enddiv = '</div>';
+                var rating =  startdiv + star1 + star2 + star3 + star4 + star5 + enddiv;
                 var pid = provider[i].ProviderID;
                 console.log(pid);
                 var text = provider[i].ProviderName;
@@ -94,7 +96,7 @@ function CreateCustMarker(custdata, providers) {
                 var premium = '<button class="btn btn-warning" onclick="PaymentProcessed()">Pay Premium</button>';
 
                 icon.addTo(fg);
-                icon.bindPopup(link + '<hr/>' + rating + '<br/>' + button + '  OR  ' + premium).addTo(fg);
+                icon.bindPopup(startdiv + link + '<br/>' + rating + '<hr/>' + button + '    OR    ' + premium + enddiv).addTo(fg);
                 
             }
             document.getElementById('providerName2').innerHTML = data.dist.providerName;
