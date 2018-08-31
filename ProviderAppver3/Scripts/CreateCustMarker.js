@@ -3,7 +3,7 @@
 function CreateCustMarker(custdata, providers) {
     var MapData = [];
     var Prov = [];
-    
+
     var range = document.getElementById('demo').innerText;
     for (var i = 0; i < providers.length; i++) {
         var providerID = providers[i].ProviderID;
@@ -22,10 +22,10 @@ function CreateCustMarker(custdata, providers) {
         MapData.push(Data);
     }
 
-    for (var i = 0; i < providers.length; i++){
+    for (var i = 0; i < providers.length; i++) {
         Prov.push(providers[i]);
     }
-    
+
     var model = {
         Prov: Prov,
         MapData: MapData
@@ -40,7 +40,7 @@ function CreateCustMarker(custdata, providers) {
         data: JSON.stringify(model),
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
-            provider = data.prov.SelectedProv
+            provider = data.prov.SelectedProv;
             for (var i = 0; i < provider.length; i++) {
 
                 icon = L.mapquest.textMarker([custdata.results[i].locations[0].displayLatLng.lat, custdata.results[i].locations[0].displayLatLng.lng], {
@@ -57,12 +57,34 @@ function CreateCustMarker(custdata, providers) {
 
                 //chris - popup contents
                 var rate = provider[i].ProviderPhone;
-                var rating = rate + '/5 Stars'
-                if (rate == 0) {
-                    rating = "This Provider has not yet been rated"
+                if (rate === "null") {
+                    rate = 0;
                 }
+                var star1 = '<span class="starFadeN" id="sRate1"></span>';
+                var star2 = '<span class="starFadeN" id="sRate2"></span>';
+                var star3 = '<span class="starFadeN" id="sRate3"></span>';
+                var star4 = '<span class="starFadeN" id="sRate4"></span>';
+                var star5 = '<span class="starFadeN" id="sRate5"></span>';
+                for (var j = 1; j <= rate; j++) {
+                    if (j === 1) {
+                        star1 = star1.replace('starFadeN', 'starGlowN');
+                    }
+                    if (j === 2) {
+                        star2 = star2.replace('starFadeN', 'starGlowN');
+                    }
+                    if (j === 3) {
+                        star3 = star3.replace('starFadeN', 'starGlowN');
+                    }
+                    if (j === 4) {
+                        star4 = star4.replace('starFadeN', 'starGlowN');
+                    }
+                    if (j === 5) {
+                        star5 = star5.replace('starFadeN', 'starGlowN');
+                    }
+                }
+                var rating = star1 + star2 + star3 + star4 + star5;
                 var pid = provider[i].ProviderID;
-                console.log(pid)
+                console.log(pid);
                 var text = provider[i].ProviderName;
                 var link = '<a href="/Providers/Details/1" target="_blank" style="font-size:20px">name</a>';
                 link = link.replace('name', text);
@@ -73,18 +95,19 @@ function CreateCustMarker(custdata, providers) {
 
                 icon.addTo(fg);
                 icon.bindPopup(link + '<hr/>' + rating + '<br/>' + button + '  OR  ' + premium).addTo(fg);
+                
             }
-            document.getElementById('providerName2').innerHTML = data.dist.providerName
+            document.getElementById('providerName2').innerHTML = data.dist.providerName;
         },
         error: function () {
             alert("error");
-        },
+        }
     });
     //Chris-provider marker style
-      
-    
 
-    
-    
-    
+
+
+
+
+
 }
